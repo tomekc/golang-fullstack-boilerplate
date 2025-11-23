@@ -7,21 +7,24 @@ import (
 )
 
 type Server struct {
-	ListenPort int
-	apiMux     *http.ServeMux
+	ListenPort       int
+	apiMux           *http.ServeMux
+	globalMiddleware []Middleware
 }
 
-func New(port int) *Server {
+func New(port int, middlewares ...Middleware) *Server {
 	return &Server{
-		ListenPort: port,
-		apiMux:     http.NewServeMux(),
+		ListenPort:       port,
+		apiMux:           http.NewServeMux(),
+		globalMiddleware: middlewares,
 	}
 }
 
 func (s *Server) Start() {
 	// Create root router
 	rootMux := http.NewServeMux()
-	rootMux.Handle("/api/", http.StripPrefix("/api", s.apiMux))
+	decoratedMux := Chain(s.apiMux, s.globalMiddleware...)
+	rootMux.Handle("/api/", http.StripPrefix("/api", decoratedMux))
 
 	addr := fmt.Sprintf(":%d", s.ListenPort)
 	fmt.Printf("Server listening on %s\n", addr)

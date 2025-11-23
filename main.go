@@ -14,7 +14,7 @@ func banner() {
 func main() {
 	banner()
 
-	httpServer := server.New(3001)
+	httpServer := server.New(3001, server.LoggingMiddleware, server.CORSMiddleware)
 	httpServer.ApiEndpoint("GET /hello", hello.Handler)
 	httpServer.Start()
 }

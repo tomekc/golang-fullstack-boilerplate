@@ -1,8 +1,14 @@
 # Golang Self Contained App Boilerplate
 
-## Developing
+## Modes of operation
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Production
+
+The production-built frontend code is embedded to Go binary: the program is totally self-contained.
+
+### Development
+
+You want to run front-end in dev mode for auto reloading.
 
 ```sh
 npm run dev
