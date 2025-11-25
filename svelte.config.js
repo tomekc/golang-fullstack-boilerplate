@@ -9,8 +9,8 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-            pages: 'backend/web',
-            assets: 'backend/web',
+            pages: 'build-frontend',
+            assets: 'build-frontend',
             fallback: 'index.html',
             precompress: true,
             strict: true

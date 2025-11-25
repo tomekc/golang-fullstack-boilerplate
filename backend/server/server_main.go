@@ -1,6 +1,7 @@
 package server
 
 import (
+	"embed"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,13 +10,15 @@ import (
 type Server struct {
 	ListenPort       int
 	apiMux           *http.ServeMux
+	staticFS         embed.FS
 	globalMiddleware []Middleware
 }
 
-func New(port int, middlewares ...Middleware) *Server {
+func New(port int, staticFS embed.FS, middlewares ...Middleware) *Server {
 	return &Server{
 		ListenPort:       port,
 		apiMux:           http.NewServeMux(),
+		staticFS:         staticFS,
 		globalMiddleware: middlewares,
 	}
 }
@@ -25,6 +28,9 @@ func (s *Server) Start() {
 	rootMux := http.NewServeMux()
 	decoratedMux := Chain(s.apiMux, s.globalMiddleware...)
 	rootMux.Handle("/api/", http.StripPrefix("/api", decoratedMux))
+
+	// Serve static files
+	s.serveStatic(rootMux)
 
 	addr := fmt.Sprintf(":%d", s.ListenPort)
 	fmt.Printf("Server listening on %s\n", addr)

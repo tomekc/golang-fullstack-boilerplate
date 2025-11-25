@@ -7,7 +7,8 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-/backend/web
+/build-frontend
+
 
 # OS
 .DS_Store
@@ -23,4 +24,5 @@ Thumbs.db
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
+# IDE
 .idea/
