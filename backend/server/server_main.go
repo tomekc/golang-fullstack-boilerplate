@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"boilerplate/backend/config"
 )
 
 type Server struct {
@@ -14,9 +16,9 @@ type Server struct {
 	globalMiddleware []Middleware
 }
 
-func New(port int, staticFS embed.FS, middlewares ...Middleware) *Server {
+func New(server config.Server, staticFS embed.FS, middlewares ...Middleware) *Server {
 	return &Server{
-		ListenPort:       port,
+		ListenPort:       server.Port,
 		apiMux:           http.NewServeMux(),
 		staticFS:         staticFS,
 		globalMiddleware: middlewares,
@@ -33,7 +35,7 @@ func (s *Server) Start() {
 	s.serveStatic(rootMux)
 
 	addr := fmt.Sprintf(":%d", s.ListenPort)
-	fmt.Printf("Server listening on %s\n", addr)
+	log.Printf("Server listening on %s\n", addr)
 
 	if err := http.ListenAndServe(addr, rootMux); err != nil {
 		log.Fatalf("Server failed to start: %v", err)

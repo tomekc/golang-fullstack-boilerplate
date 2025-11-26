@@ -2,8 +2,9 @@ package main
 
 import (
 	"embed"
-	"fmt"
+	"log"
 
+	"boilerplate/backend/config"
 	"boilerplate/backend/hello"
 	"boilerplate/backend/server"
 )
@@ -12,13 +13,14 @@ import (
 var staticFiles embed.FS
 
 func banner() {
-	fmt.Println("Starting boilerplate server...")
+	log.Println("Starting boilerplate server...")
 }
 
 func main() {
 	banner()
+	cfg := config.Load()
 
-	httpServer := server.New(3001, staticFiles, server.LoggingMiddleware, server.CORSMiddleware)
+	httpServer := server.New(cfg.Server, staticFiles, server.LoggingMiddleware, server.CORSMiddleware)
 	httpServer.ApiEndpoint("GET /hello", hello.Handler)
 	httpServer.Start()
 }
