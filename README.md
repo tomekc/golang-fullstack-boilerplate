@@ -109,3 +109,37 @@ npm run build
 This builds the SvelteKit app to `frontend/webapp/build/`. When you compile the Go binary, these files are embedded automatically.
 
 You can preview the production build with `npm run preview`.
+
+## Docker
+
+### Building the Docker image
+
+Build the container image:
+
+```sh
+docker build -t golang-fullstack-boilerplate .
+```
+
+### Running the container
+
+Run the container with the data directory mounted:
+
+```sh
+docker run -d \
+  -p 3000:3000 \
+  -v $(pwd)/data:/data \
+  --name boilerplate \
+  golang-fullstack-boilerplate
+```
+
+This will:
+- Map port 3000 on your host to port 3000 in the container
+- Mount the `data/` directory from your project to `/data` in the container
+- Run the application with the `-docker` flag
+
+### Stopping the container
+
+```sh
+docker stop boilerplate
+docker rm boilerplate
+```
