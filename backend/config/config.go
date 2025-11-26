@@ -14,7 +14,7 @@ type RunMode int
 
 // Parent folder of data directory: for configuration, caches, etc
 const dataDirectory = "data"
-const devConfigPath = "frontend/lib/devconfig.json"
+const devConfigPath = "frontend/webapp/src/lib/devconfig.json"
 
 const (
 	RunModeStandalone = iota
@@ -39,7 +39,7 @@ type frontendConfig struct {
 func readFrontendJsonConfig() frontendConfig {
 	b, err := os.ReadFile(devConfigPath)
 	if err != nil {
-		log.Fatalf("Failed to read frontend config: %v")
+		log.Fatalf("Failed to read frontend config: %v", err)
 	}
 	cfg := frontendConfig{}
 	err = json.Unmarshal(b, &cfg)

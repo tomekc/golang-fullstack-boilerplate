@@ -9,7 +9,7 @@ import (
 	"boilerplate/backend/server"
 )
 
-//go:embed all:build-frontend
+//go:embed all:frontend/webapp/build
 var staticFiles embed.FS
 
 func banner() {

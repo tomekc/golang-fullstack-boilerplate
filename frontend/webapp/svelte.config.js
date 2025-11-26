@@ -9,15 +9,12 @@ const config = {
 
 	kit: {
 		adapter: adapter({
-            pages: 'build-frontend',
-            assets: 'build-frontend',
+            pages: 'build',
+            assets: 'build',
             fallback: 'index.html',
             precompress: true,
             strict: true
-        }),
-		files: {
-			src: 'frontend'
-		}
+        })
 	}
 };
 

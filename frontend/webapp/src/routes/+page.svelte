@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fetchCurrentTime } from '$lib/services/hello';
+	import { fetchCurrentTime } from '../lib/services/hello';
 
 	let currentTime = $state<string>('');
 	let loading = $state<boolean>(true);

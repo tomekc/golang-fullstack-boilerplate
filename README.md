@@ -1,30 +1,42 @@
 # Golang Self Contained App Boilerplate
 
-## Modes of operation
+## Project Structure
+
+This project uses npm workspaces:
+- Root workspace manages the overall project
+- Frontend webapp is located at `frontend/webapp/`
+- The webapp follows standard SvelteKit project structure with `src/` directory
+
+## Modes of Operation
 
 ### Production
 
-The production-built frontend code is embedded to Go binary: the program is totally self-contained.
+The production-built frontend code is embedded into the Go binary: the program is totally self-contained. The SvelteKit build output from `frontend/webapp/build/` is embedded at compile time.
 
 ### Development
 
-You want to run front-end in dev mode for auto reloading.
+Run the frontend in dev mode for auto-reloading and the backend separately:
 
+**Frontend (from project root):**
 ```sh
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
+
+**Backend:**
+```sh
+go run main.go
+```
+
+The frontend dev server runs on port 3000, and the backend API server runs on port 3001.
 
 ## Building
 
-To create a production version of your app:
+To create a production version:
 
 ```sh
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+This builds the SvelteKit app to `frontend/webapp/build/`. When you compile the Go binary, these files are embedded automatically.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+You can preview the production build with `npm run preview`.
