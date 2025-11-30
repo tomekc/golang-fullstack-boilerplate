@@ -1,45 +1,17 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-	import { fetchCurrentTime } from '../lib/services/hello';
-    import {Button, Col, Row} from "@sveltestrap/sveltestrap";
+<h1>Welcome to Golang-SvelteKit Boilerplate</h1>
+<p class="lead">A fullstack starter kit for mere mortals</p>
 
-	let currentTime = $state<string>('');
-	let loading = $state<boolean>(true);
-	let error = $state<string>('');
+<div class="mt-4">
+    <h2>Getting Started</h2>
+    <p>This is a self-contained, simple web application boilerplate combining:</p>
+    <ul>
+        <li><strong>SvelteKit</strong> - Modern frontend framework</li>
+        <li><strong>Golang</strong> - Backend with embedded frontend</li>
+        <li><strong>Bootstrap</strong> - UI components via Sveltestrap</li>
+    </ul>
 
-	onMount(async () => {
-		try {
-			const response = await fetchCurrentTime();
-			currentTime = response.time;
-		} catch (err) {
-			error = err instanceof Error ? err.message : 'Unknown error';
-		} finally {
-			loading = false;
-		}
-	});
-</script>
+    <p class="text-muted">
+        Check out the <a href="/hello">Hello World</a> page to see an interactive backend call example.
+    </p>
+</div>
 
-<Row>
-    <h1>Welcome to Golang-SvelteKit Boilerplate</h1>
-</Row>
-<Row class="pt-4">
-    <Col md="2">
-        Get time from backend:
-    </Col>
-    <Col md="9">
-        {#if loading}
-            <p>Loading...</p>
-        {:else if error}
-            <p>Error: {error}</p>
-        {:else}
-            <p>Now is {currentTime}</p>
-        {/if}
-    </Col>
-</Row>
-
-<Row class="bg-secondary-subtle">
-    <div class="p-3">
-        Made with <a href="https://svelte.dev/docs/kit"><b>Svelte</b></a>
-            and <a href="https://sveltestrap.js.org/?path=/docs/sveltestrap-overview--docs"><b>Sveltestrap</b></a> (Bootstrap CSS components).
-    </div>
-</Row>
