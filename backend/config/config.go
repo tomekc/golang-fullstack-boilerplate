@@ -49,12 +49,20 @@ func readFrontendJsonConfig() frontendConfig {
 	return cfg
 }
 
+func isTruthy(s string) bool {
+	switch s {
+	case "1", "t", "T", "true", "TRUE", "True", "yes", "YES", "Yes", "on", "ON", "On":
+		return true
+	}
+	return false
+}
+
 func Load() Config {
 	devMode := flag.Bool("dev", false, "Development mode: runs backend only on port ")
 	dockerMode := flag.Bool("docker", false, "Docker mode: self contained, run in container")
 	flag.Parse()
 
-	dataDir, mode := determineRunMode(*devMode, *dockerMode)
+	dataDir, mode := determineRunMode(*devMode || isTruthy(os.Getenv("DEV")), *dockerMode)
 	cfg := defaultConfig(dataDir, mode)
 	// parse config file
 	configFilePath := fmt.Sprintf("%s/config.toml", dataDir)
