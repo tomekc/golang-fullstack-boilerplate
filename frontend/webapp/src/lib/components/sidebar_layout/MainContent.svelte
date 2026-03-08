@@ -3,9 +3,9 @@
     let { children, copyright } = $props();
 </script>
 
-<div id="layoutSidenav_content" class="d-flex flex-column">
-    <main class="flex-grow-1">
-        <div class="container-fluid px-4 py-4">
+<div id="layoutSidenav_content" class="is-flex is-flex-direction-column">
+    <main class="is-flex-grow-1">
+        <div class="container is-fluid p-5">
             {@render children?.()}
         </div>
     </main>

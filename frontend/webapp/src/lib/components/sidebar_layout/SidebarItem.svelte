@@ -1,56 +1,49 @@
 <script lang="ts">
     import { page } from '$app/state';
-    import { NavLink } from '@sveltestrap/sveltestrap';
 
     interface Props {
         href: string;
         icon?: string;
-        [key: string]: any;
     }
 
-    let { href, icon, children, ...restProps }: Props = $props();
-
-    console.log(`Href=${href} Page=${page.url.pathname}`);
+    let { href, icon, children }: Props = $props();
 
     const isActive = page.url.pathname === href;
-    let klas = isActive ? 'active' : '';
 </script>
 
-<NavLink {href} class="nav-link {klas}" {...restProps}>
-    {#if icon}
-        <div class="sb-nav-link-icon">
-            <i class="fas fa-{icon}"></i>
-        </div>
-    {/if}
-    {@render children?.()}
-</NavLink>
+<li>
+    <a {href} class="is-flex is-align-items-center" class:is-active={isActive}>
+        {#if icon}
+            <span class="icon is-small mr-2">
+                <i class="fas fa-{icon}"></i>
+            </span>
+        {/if}
+        <span>{@render children?.()}</span>
+    </a>
+</li>
 
 <style>
-    :global(.sb-sidenav .nav-link) {
+    li {
+        list-style: none;
+    }
+
+    a {
         display: flex;
         align-items: center;
         padding: 0.75rem 1rem;
         color: rgba(255, 255, 255, 0.5);
         text-decoration: none;
         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+        border-radius: 0;
     }
 
-    :global(.sb-sidenav .nav-link:hover) {
+    a:hover {
         color: #fff;
         background-color: rgba(255, 255, 255, 0.075);
     }
 
-    :global(.sb-sidenav .nav-link.active) {
+    a.is-active {
         color: #fff !important;
         background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    :global(.sb-nav-link-icon) {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1rem;
-        margin-right: 0.75rem;
-        font-size: 0.9rem;
     }
 </style>

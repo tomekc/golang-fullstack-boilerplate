@@ -2,11 +2,13 @@
     let { title, children } = $props();
 </script>
 
-<div class="sb-sidenav-menu-heading">{title}</div>
-{@render children?.()}
+<p class="menu-label">{title}</p>
+<ul class="menu-list">
+    {@render children?.()}
+</ul>
 
 <style>
-    :global(.sb-sidenav-menu-heading) {
+    :global(.menu-label) {
         padding: 1.75rem 1rem 0.75rem;
         font-size: 0.75rem;
         font-weight: 800;
