@@ -1,5 +1,8 @@
-<h1 class="title">Welcome to Golang-SvelteKit Boilerplate</h1>
-<p class="subtitle">A fullstack starter kit for mere mortals</p>
+<script lang="ts">
+    import {PageTitle} from 'svebulma';
+</script>
+
+<PageTitle title="Welcome to Golang-SvelteKit Boilerplate" subtitle="A fullstack starter kit for mere mortals"/>
 
 <div class="mt-4">
     <h2>Getting Started</h2>

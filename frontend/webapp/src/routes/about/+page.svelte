@@ -1,2 +1,6 @@
-<h1 class="title">About</h1>
+<script lang="ts">
+    import { PageTitle } from 'svebulma';
+</script>
+
+<PageTitle title="About" />
 <p class="content">This is the about page for the Golang-SvelteKit Boilerplate.</p>
