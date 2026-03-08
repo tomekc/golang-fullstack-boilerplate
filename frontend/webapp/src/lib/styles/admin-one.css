@@ -1,0 +1,443 @@
+/*
+ * Admin One Bulma Dashboard - Custom CSS
+ * Adapted from https://github.com/vikdiesel/admin-one-bulma-dashboard (MIT License)
+ */
+
+/* ===== Base ===== */
+:root {
+    --base-color: #2e323a;
+    --base-color-light: rgba(24, 28, 33, 0.06);
+    --default-padding: 1.5rem;
+    --aside-width: 14rem;
+    --aside-mobile-width: 15rem;
+    --aside-icon-width: 3rem;
+    --navbar-avatar-size: 1.75rem;
+}
+
+html {
+    font-family: "Nunito", sans-serif;
+}
+
+body {
+    background-color: #f8f8f8;
+}
+
+/* ===== Navbar ===== */
+nav.navbar.is-fixed-top {
+    box-shadow: 0 1px 0 rgba(24, 28, 33, 0.04);
+}
+
+nav.navbar .navbar-item.has-control {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+nav.navbar .navbar-item.has-control .control .input {
+    color: #363636;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+nav.navbar .navbar-item.has-divider {
+    border-right: 1px solid rgba(219, 219, 219, 0.25);
+}
+
+nav.navbar .navbar-item.has-user-avatar .is-user-avatar {
+    margin-right: 0.75rem;
+    display: inline-flex;
+    width: var(--navbar-avatar-size);
+    height: var(--navbar-avatar-size);
+}
+
+nav.navbar .navbar-item.is-desktop-icon-only span:not(.icon) {
+    display: none;
+}
+
+/* ===== Aside (Sidebar) ===== */
+aside.aside {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    height: 100vh;
+    padding: 0;
+    box-shadow: none;
+    background: var(--base-color);
+}
+
+aside.aside .aside-tools {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: #1d2025;
+    color: #fff;
+    line-height: 3.25rem;
+    height: 3.25rem;
+    padding-left: 0.75rem;
+    flex: 1;
+}
+
+aside.aside .aside-tools .icon {
+    margin-right: 0.75rem;
+}
+
+/* Override Bulma 1.x CSS custom properties for dark sidebar */
+aside.aside .menu.is-menu-main {
+    --bulma-menu-item-radius: 0;
+    --bulma-menu-list-link-padding: 0.5em 0;
+    --bulma-menu-list-border-left: 0;
+    --bulma-menu-nested-list-margin: 0;
+    --bulma-menu-nested-list-padding-left: 0;
+    --bulma-menu-label-color: rgba(255, 255, 255, 0.35);
+    --bulma-menu-label-font-size: 0.75em;
+    --bulma-menu-label-letter-spacing: 0.05em;
+    --bulma-menu-label-spacing: 0.75em;
+}
+
+/* Override Bulma .menu-label defaults */
+aside.aside .menu-label {
+    padding: 0 0.75rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* Override Bulma .menu-list link styles (must beat hsl() calculations) */
+aside.aside .menu-list {
+    border-left: 0;
+    line-height: 1.25;
+}
+
+aside.aside .menu-list a,
+aside.aside .menu-list button {
+    color: rgba(255, 255, 255, 0.5) !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    padding: 0.5rem 0;
+}
+
+aside.aside .menu-list a.has-icon {
+    display: flex;
+    align-items: center;
+}
+
+aside.aside .menu-list a .icon {
+    width: var(--aside-icon-width);
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+aside.aside .menu-list a:hover,
+aside.aside .menu-list button:hover {
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 0 !important;
+}
+
+aside.aside .menu-list a.is-active,
+aside.aside .menu-list a.is-selected,
+aside.aside .menu-list button.is-active {
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.075) !important;
+    border-radius: 0 !important;
+}
+
+aside.aside .menu-list .icon.has-update-mark::after {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    position: absolute;
+    background-color: #ffdd57;
+    top: 0.15rem;
+    right: 0.65rem;
+}
+
+/* Submenus */
+aside.aside .menu-list li ul {
+    display: none;
+    border-left: 0 !important;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding-left: 0 !important;
+    margin: 0 0 0.75rem;
+}
+
+aside.aside .menu-list li.is-active ul {
+    display: block;
+}
+
+aside.aside .menu-list li ul li a {
+    padding: 0.5rem 0 0.5rem 0.75rem;
+    font-size: 0.95rem;
+}
+
+aside.aside .menu-list a.has-dropdown-icon {
+    position: relative;
+    padding-right: var(--aside-icon-width);
+}
+
+aside.aside .menu-list a.has-dropdown-icon .dropdown-icon {
+    position: absolute;
+    top: 0.5rem;
+    right: 0;
+}
+
+/* Desktop aside */
+@media screen and (min-width: 1024px) {
+    html.has-aside-left.has-aside-expanded nav.navbar,
+    html.has-aside-left.has-aside-expanded body {
+        padding-left: var(--aside-width);
+    }
+
+    html.has-aside-left nav.navbar,
+    html.has-aside-left body {
+        transition: padding-left 250ms ease-in-out 50ms;
+    }
+
+    html.has-aside-left aside.is-placed-left {
+        display: block;
+    }
+
+    aside.aside.is-expanded {
+        width: var(--aside-width);
+    }
+
+    aside.aside.is-expanded .menu-list li a .icon {
+        width: var(--aside-icon-width);
+    }
+
+    aside.aside.is-expanded .menu-list span.menu-item-label {
+        display: inline-block;
+    }
+}
+
+/* Mobile aside */
+@media screen and (max-width: 1023px) {
+    #app, nav.navbar {
+        transition: margin-left 250ms ease-in-out 50ms;
+    }
+
+    aside.aside {
+        transition: left 250ms ease-in-out 50ms;
+    }
+
+    html.has-aside-mobile-transition body {
+        overflow-x: hidden;
+    }
+
+    html.has-aside-mobile-transition body,
+    html.has-aside-mobile-transition #app,
+    html.has-aside-mobile-transition nav.navbar {
+        width: 100vw;
+    }
+
+    html.has-aside-mobile-transition aside.aside {
+        width: var(--aside-mobile-width);
+        display: block;
+        left: calc(var(--aside-mobile-width) * -1);
+    }
+
+    html.has-aside-mobile-transition aside.aside .menu-list a {
+        display: flex;
+        align-items: center;
+    }
+
+    html.has-aside-mobile-transition aside.aside .menu-list a .icon {
+        width: var(--aside-icon-width);
+    }
+
+    html.has-aside-mobile-transition aside.aside .menu-list span.menu-item-label {
+        display: inline-block;
+    }
+
+    html.has-aside-mobile-expanded #app,
+    html.has-aside-mobile-expanded nav.navbar {
+        margin-left: var(--aside-mobile-width);
+    }
+
+    html.has-aside-mobile-expanded aside.aside {
+        left: 0;
+    }
+}
+
+/* ===== Title Bar ===== */
+section.section.is-title-bar {
+    padding: var(--default-padding);
+    border-bottom: 1px solid var(--base-color-light);
+}
+
+section.section.is-title-bar ul li {
+    display: inline-block;
+    padding: 0 0.75rem 0 0;
+    font-size: 1.5rem;
+    color: #7a7a7a;
+}
+
+section.section.is-title-bar ul li::after {
+    display: inline-block;
+    content: '/';
+    padding-left: 0.75rem;
+}
+
+section.section.is-title-bar ul li:last-child {
+    padding-right: 0;
+    font-weight: 900;
+    color: #262626;
+}
+
+section.section.is-title-bar ul li:last-child::after {
+    display: none;
+}
+
+/* ===== Hero Bar ===== */
+section.hero.is-hero-bar {
+    background-color: #fff;
+    border-bottom: 1px solid var(--base-color-light);
+}
+
+section.hero.is-hero-bar .hero-body {
+    padding: var(--default-padding);
+}
+
+/* ===== Main Section ===== */
+section.section.is-main-section {
+    padding: var(--default-padding);
+}
+
+/* ===== Card ===== */
+.card:not(:last-child) {
+    margin-bottom: var(--default-padding);
+}
+
+.card {
+    border-radius: 0.375rem;
+    border: 1px solid var(--base-color-light);
+    box-shadow: none;
+}
+
+.card.has-table .card-content {
+    padding: 0;
+}
+
+.card.has-table .b-table {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.card .card-header {
+    border-bottom: 1px solid var(--base-color-light);
+    box-shadow: none;
+}
+
+.card .card-header .card-header-title .icon {
+    margin-right: 0.5rem;
+}
+
+.card .is-widget-icon .icon {
+    width: 5rem;
+    height: 5rem;
+}
+
+.card .is-widget-label .subtitle {
+    color: #7a7a7a;
+}
+
+/* ===== Tiles ===== */
+.is-tiles-wrapper {
+    margin-bottom: var(--default-padding);
+}
+
+/* ===== Table ===== */
+table.table thead th {
+    border-bottom-width: 1px;
+}
+
+table.table td .image {
+    margin: 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+table.table td.is-progress-col {
+    min-width: 5rem;
+    vertical-align: middle;
+}
+
+table.table td.is-image-cell .image {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+table.table td.is-image-cell .image img {
+    border-radius: 50%;
+}
+
+table.table td.is-actions-cell .buttons {
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+}
+
+.b-table .table {
+    border: 0;
+    border-radius: 0;
+}
+
+.b-table .table-wrapper {
+    margin-bottom: 0;
+}
+
+/* Pagination in card tables */
+.b-table .notification,
+.table-pagination {
+    padding: 1.125rem 1.5rem;
+    margin: 0;
+    border-top: 1px solid var(--base-color-light);
+    background: #fafafa;
+    border-radius: 0 0 0.375rem 0.375rem;
+}
+
+/* ===== Footer ===== */
+footer.footer {
+    background-color: #fff;
+    padding: 0.5rem 1.5rem;
+}
+
+/* ===== Modal ===== */
+.modal-card-head {
+    background-color: #f5f5f5;
+}
+
+.modal-card-title {
+    font-size: 1rem;
+}
+
+.modal-card-body {
+    padding: 1.5rem 20px;
+}
+
+.modal-card-head {
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.modal-card-foot {
+    border-top: 0;
+    background-color: #f5f5f5;
+}
+
+/* ===== Progress override ===== */
+progress.progress {
+    background-color: #dbdbdb;
+}
+
+/* ===== Misc ===== */
+.is-user-avatar img {
+    border-radius: 50%;
+}
+
+.is-user-name {
+    margin-right: 0.375rem;
+}

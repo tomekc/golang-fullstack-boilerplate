@@ -10,11 +10,12 @@
         scrollable?: boolean;
         head?: Snippet;
         foot?: Snippet;
+        pagination?: Snippet;
         children?: Snippet;
     }
 
     let {
-        striped = false,
+        striped = true,
         hoverable = true,
         bordered = false,
         fullwidth = true,
@@ -22,6 +23,7 @@
         scrollable = false,
         head,
         foot,
+        pagination,
         children,
     }: Props = $props();
 
@@ -35,18 +37,27 @@
     ].filter(Boolean).join(' '));
 </script>
 
-{#if scrollable}
-    <div class="table-container">
-        <table class={classes}>
-            {#if head}<thead>{@render head()}</thead>{/if}
-            {#if foot}<tfoot>{@render foot()}</tfoot>{/if}
-            <tbody>{@render children?.()}</tbody>
-        </table>
-    </div>
-{:else}
-    <table class={classes}>
-        {#if head}<thead>{@render head()}</thead>{/if}
-        {#if foot}<tfoot>{@render foot()}</tfoot>{/if}
-        <tbody>{@render children?.()}</tbody>
-    </table>
-{/if}
+<div class="b-table">
+    {#if scrollable}
+        <div class="table-container has-mobile-cards">
+            <table class={classes}>
+                {#if head}<thead>{@render head()}</thead>{/if}
+                {#if foot}<tfoot>{@render foot()}</tfoot>{/if}
+                <tbody>{@render children?.()}</tbody>
+            </table>
+        </div>
+    {:else}
+        <div class="table-wrapper has-mobile-cards">
+            <table class={classes}>
+                {#if head}<thead>{@render head()}</thead>{/if}
+                {#if foot}<tfoot>{@render foot()}</tfoot>{/if}
+                <tbody>{@render children?.()}</tbody>
+            </table>
+        </div>
+    {/if}
+    {#if pagination}
+        <div class="table-pagination notification">
+            {@render pagination()}
+        </div>
+    {/if}
+</div>

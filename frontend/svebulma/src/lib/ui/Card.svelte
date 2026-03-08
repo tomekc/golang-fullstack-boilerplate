@@ -3,23 +3,41 @@
 
     interface Props {
         title?: string;
+        icon?: string;
+        hasTable?: boolean;
         header?: Snippet;
+        headerAction?: Snippet;
         footer?: Snippet;
         children?: Snippet;
     }
 
-    let { title, header, footer, children }: Props = $props();
+    let { title, icon, hasTable = false, header, headerAction, footer, children }: Props = $props();
+
+    const cardClasses = $derived([
+        'card',
+        hasTable ? 'has-table' : '',
+    ].filter(Boolean).join(' '));
 </script>
 
-<div class="card">
+<div class={cardClasses}>
     {#if header || title}
-        <div class="card-header">
+        <header class="card-header">
             {#if header}
                 {@render header()}
             {:else}
-                <p class="card-header-title">{title}</p>
+                <p class="card-header-title">
+                    {#if icon}
+                        <span class="icon"><i class="mdi mdi-{icon}"></i></span>
+                    {/if}
+                    {title}
+                </p>
             {/if}
-        </div>
+            {#if headerAction}
+                <span class="card-header-icon">
+                    {@render headerAction()}
+                </span>
+            {/if}
+        </header>
     {/if}
 
     <div class="card-content">

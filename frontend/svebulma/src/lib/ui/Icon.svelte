@@ -10,7 +10,9 @@
         prefix?: string;
     }
 
-    let { name, size, color, spin = false, prefix = 'fas' }: Props = $props();
+    let { name, size, color, spin = false, prefix = 'mdi' }: Props = $props();
+
+    const isMdi = $derived(prefix === 'mdi');
 
     const spanClasses = $derived([
         'icon',
@@ -18,11 +20,11 @@
         color ? `has-text-${color}` : '',
     ].filter(Boolean).join(' '));
 
-    const iconClasses = $derived([
-        prefix,
-        `fa-${name}`,
-        spin ? 'fa-spin' : '',
-    ].filter(Boolean).join(' '));
+    const iconClasses = $derived(
+        isMdi
+            ? ['mdi', `mdi-${name}`, spin ? 'mdi-spin' : ''].filter(Boolean).join(' ')
+            : [prefix, `fa-${name}`, spin ? 'fa-spin' : ''].filter(Boolean).join(' ')
+    );
 </script>
 
 <span class={spanClasses}>

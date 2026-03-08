@@ -5,20 +5,19 @@
         href: string;
         icon?: string;
         active?: boolean;
+        hasUpdateMark?: boolean;
         children?: Snippet;
     }
 
-    let { href, icon, active = false, children }: Props = $props();
+    let { href, icon, active = false, hasUpdateMark = false, children }: Props = $props();
 </script>
 
 <li>
-    <a {href} class:is-active={active}>
+    <a {href} class:is-active={active} class:has-icon={!!icon}>
         {#if icon}
-            <span class="icon is-small mr-2">
-                <i class="fas fa-{icon}"></i>
-            </span>
+            <span class="icon" class:has-update-mark={hasUpdateMark}><i class="mdi mdi-{icon}"></i></span>
         {/if}
-        <span>{@render children?.()}</span>
+        <span class="menu-item-label">{@render children?.()}</span>
     </a>
 </li>
 

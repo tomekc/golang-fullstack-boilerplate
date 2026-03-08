@@ -6,6 +6,8 @@ export { default as SidebarSection } from './lib/layout/SidebarSection.svelte';
 export { default as SidebarItem } from './lib/layout/SidebarItem.svelte';
 export { default as MainContent } from './lib/layout/MainContent.svelte';
 export { default as PageFooter } from './lib/layout/PageFooter.svelte';
+export { default as TitleBar } from './lib/layout/TitleBar.svelte';
+export { default as HeroBar } from './lib/layout/HeroBar.svelte';
 
 // UI
 export { default as Button } from './lib/ui/Button.svelte';
@@ -18,6 +20,7 @@ export { default as Modal } from './lib/ui/Modal.svelte';
 export { default as Breadcrumb } from './lib/ui/Breadcrumb.svelte';
 export { default as Progress } from './lib/ui/Progress.svelte';
 export { default as PageTitle } from './lib/ui/PageTitle.svelte';
+export { default as Tile } from './lib/ui/Tile.svelte';
 
 // Form
 export { default as Field } from './lib/form/Field.svelte';
