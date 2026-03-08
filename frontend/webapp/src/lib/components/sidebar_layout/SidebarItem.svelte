@@ -1,9 +1,11 @@
 <script lang="ts">
+    import type { Snippet } from 'svelte';
     import { page } from '$app/state';
 
     interface Props {
         href: string;
         icon?: string;
+        children?: Snippet;
     }
 
     let { href, icon, children }: Props = $props();

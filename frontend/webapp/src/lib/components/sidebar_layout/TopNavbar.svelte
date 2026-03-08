@@ -7,7 +7,7 @@
     let { appName = 'Boilerplate', version = '0.0.1' }: Props = $props();
 </script>
 
-<nav class="navbar is-dark sb-topnav" role="navigation">
+<nav class="navbar is-dark sb-topnav">
     <div class="navbar-brand">
         <a class="navbar-item has-text-weight-bold" href="/">
             {appName}

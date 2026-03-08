@@ -37,6 +37,22 @@
         background-color: rgba(0, 0, 0, 0.1);
     }
 
+    /* Override Bulma .menu-list a specificity for dark sidebar */
+    :global(.sb-sidenav .menu-list a) {
+        color: rgba(255, 255, 255, 0.5);
+        background-color: transparent;
+    }
+
+    :global(.sb-sidenav .menu-list a:hover) {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.075);
+    }
+
+    :global(.sb-sidenav .menu-list a.is-active) {
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
     /* Responsive - hide sidebar on mobile */
     @media (max-width: 768px) {
         #layoutSidenav_nav {

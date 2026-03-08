@@ -1,6 +1,5 @@
 <script lang="ts">
     import { fetchCurrentTime } from '$lib/services/hello';
-    import { Button, Card, CardBody, CardFooter, CardHeader } from '@sveltestrap/sveltestrap';
 
     let currentTime = $state<string>('');
     let loading = $state<boolean>(false);
@@ -22,40 +21,42 @@
     }
 </script>
 
-<h1>Hello World</h1>
-<p class="text-muted">Interactive backend call example</p>
+<h1 class="title">Hello World</h1>
+<p class="subtitle has-text-grey">Interactive backend call example</p>
 
-<div class="mt-4">
-    <Card class="shadow-sm" style="max-width: 600px;">
-        <CardHeader>
-            <h5 class="mb-0">Backend Call</h5>
-        </CardHeader>
-        <CardBody>
+<div class="mt-4" style="max-width: 600px;">
+    <div class="card">
+        <div class="card-header">
+            <p class="card-header-title">Backend Call</p>
+        </div>
+        <div class="card-content">
             {#if loading}
-                <div class="d-flex align-items-center">
-                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <div class="is-flex is-align-items-center">
+                    <span class="icon has-text-primary mr-2">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
                     <span>Fetching time from server...</span>
                 </div>
             {:else if error}
-                <div class="alert alert-danger mb-0" role="alert">
+                <div class="notification is-danger">
                     <strong>Error:</strong> {error}
                 </div>
             {:else if currentTime}
-                <div class="alert alert-success mb-0" role="alert">
+                <div class="notification is-success">
                     <strong>Server time:</strong> {currentTime}
                 </div>
             {:else}
-                <p class="text-muted mb-0">
+                <p class="has-text-grey">
                     Click the button below to fetch the current time from the backend server.
                 </p>
             {/if}
-        </CardBody>
-        <CardFooter>
-            <Button color="primary" onclick={handleGetTime} disabled={loading}>
-                {loading ? 'Loading...' : 'Get the time'}
-            </Button>
-        </CardFooter>
-    </Card>
+        </div>
+        <div class="card-footer">
+            <div class="card-footer-item">
+                <button class="button is-primary" onclick={handleGetTime} disabled={loading}>
+                    {loading ? 'Loading...' : 'Get the time'}
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
