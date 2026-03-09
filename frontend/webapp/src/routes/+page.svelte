@@ -23,16 +23,6 @@
         <Tile label="Performance" value="256%" icon="finance" color="success" />
     </div>
 
-    <Card title="Performance" icon="finance">
-        {#snippet headerAction()}
-            <Icon name="reload" />
-        {/snippet}
-
-        <div class="chart-area" style="height: 200px; display: flex; align-items: center; justify-content: center;">
-            <p class="has-text-grey">Chart placeholder — integrate Chart.js or similar</p>
-        </div>
-    </Card>
-
     <Card title="Clients" icon="account-multiple" hasTable>
         {#snippet headerAction()}
             <Icon name="reload" />
