@@ -31,3 +31,15 @@ export { default as Checkbox } from './lib/form/Checkbox.svelte';
 
 // Table
 export { default as Table } from './lib/table/Table.svelte';
+
+// Advanced
+export { default as AdminNavbar } from './lib/advanced/AdminNavbar.svelte';
+export { default as NavbarSearch } from './lib/advanced/NavbarSearch.svelte';
+export { default as NavbarLink } from './lib/advanced/NavbarLink.svelte';
+export { default as NavbarDropdown } from './lib/advanced/NavbarDropdown.svelte';
+export { default as NavbarDropdownItem } from './lib/advanced/NavbarDropdownItem.svelte';
+export { default as AdminSidebar } from './lib/advanced/AdminSidebar.svelte';
+export { default as SidebarTools } from './lib/advanced/SidebarTools.svelte';
+export { default as SidebarMenu } from './lib/advanced/SidebarMenu.svelte';
+export { default as SidebarMenuSection } from './lib/advanced/SidebarMenuSection.svelte';
+export { default as SidebarMenuItem } from './lib/advanced/SidebarMenuItem.svelte';
