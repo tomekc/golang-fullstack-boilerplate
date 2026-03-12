@@ -69,7 +69,7 @@
                 <tr>
                     <td class="is-image-cell">
                         <div class="image">
-                            <img src="https://avatars.dicebear.com/v2/initials/{client.avatar}.svg" alt={client.name} class="is-rounded">
+                            <img src="https://api.dicebear.com/9.x/initials/svg?seed={client.name}" alt={client.name} class="is-rounded">
                         </div>
                     </td>
                     <td data-label="Name">{client.name}</td>
