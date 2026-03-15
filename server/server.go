@@ -17,13 +17,16 @@ type Server struct {
 	globalMiddleware []middleware.Middleware
 }
 
-func New(cfg config.Server, staticFS embed.FS, middlewares ...middleware.Middleware) *Server {
+func New(cfg config.Server, staticFS embed.FS) *Server {
 	return &Server{
-		ListenPort:       cfg.Port,
-		apiMux:           http.NewServeMux(),
-		staticFS:         staticFS,
-		globalMiddleware: middlewares,
+		ListenPort: cfg.Port,
+		apiMux:     http.NewServeMux(),
+		staticFS:   staticFS,
 	}
+}
+
+func (s *Server) Use(m middleware.Middleware) {
+	s.globalMiddleware = append(s.globalMiddleware, m)
 }
 
 func (s *Server) Start() {

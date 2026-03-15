@@ -11,7 +11,7 @@ func (s *Server) ApiEndpoint(pattern string, handler http.HandlerFunc) {
 }
 
 // Add our api endpoints here. Feel free to remove "/hello" if you don't need it.
-func (s *Server) AddAPIRoutes() {
+func (s *Server) RegisterAPIRoutes() {
 	s.ApiEndpoint("GET /hello", hello.GetTime)
 	s.ApiEndpoint("POST /echo", hello.Echo)
 }
