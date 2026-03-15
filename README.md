@@ -5,7 +5,7 @@
 ### Just two ingredients
 
 * **SvelteKit** front-end
-* **Golang** backend
+* **Golang** server
 
 This project is a self-contained, simple web application you can use for
 
@@ -51,7 +51,7 @@ which returns current time. Just enough to present idea, simple enough to delete
 #### Packages and files
 
 - `main.go` is entry point and is placed in project root, because some IDEs get totally confused if project starts somewhere else
-- `backend/` is root package for all functional packages:
+- `server/` is root package for all functional packages:
   - `server` is boilerplate for HTTP server, middlewares, etc.
   - `rest` helpers to build HTTP responses and serialize to JSON
   - `hello` implements logic of `/api/hello` 
@@ -65,16 +65,16 @@ npm run dev
 ```
 
 Will start Svelte app in auto-reloading mode on port **3000**. 
-The app will **automatically detect that** and call backend on port **3001**.
+The app will **automatically detect that** and call server on port **3001**.
 
-Start backend from your IDE with the `-dev` command line parameter, or:
+Start server from your IDE with the `-dev` command line parameter, or:
 
 ```shell
 go run . -dev
 ```
 
-Backend **will read port number** from `frontend/webapp/src/lib/devconfig.json` to make sure
-frontend and backend are aligned. 
+Server **will read port number** from `frontend/webapp/src/lib/devconfig.json` to make sure
+frontend and server are aligned. 
 
 ## Modes of Operation
 
@@ -84,19 +84,19 @@ The production-built frontend code is embedded into the Go binary: the program i
 
 ### Development
 
-Run the frontend in dev mode for auto-reloading and the backend separately:
+Run the frontend in dev mode for auto-reloading and the server separately:
 
 **Frontend (from project root):**
 ```sh
 npm run dev
 ```
 
-**Backend:**
+**Server:**
 ```sh
 go run main.go
 ```
 
-The frontend dev server runs on port 3000, and the backend API server runs on port 3001.
+The frontend dev server runs on port 3000, and the Go API server runs on port 3001.
 
 ## Building
 

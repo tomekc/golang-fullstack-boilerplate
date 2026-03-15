@@ -33,7 +33,7 @@ type Server struct {
 }
 
 type frontendConfig struct {
-	BackendPort int `json:"backend_port"`
+	ServerPort int `json:"server_port"`
 }
 
 func readFrontendJsonConfig() frontendConfig {
@@ -58,7 +58,7 @@ func isTruthy(s string) bool {
 }
 
 func Load() Config {
-	devMode := flag.Bool("dev", false, "Development mode: runs backend only on port ")
+	devMode := flag.Bool("dev", false, "Development mode: runs server only on port ")
 	dockerMode := flag.Bool("docker", false, "Docker mode: self contained, run in container")
 	flag.Parse()
 
@@ -79,7 +79,7 @@ func Load() Config {
 
 	// Override server port in dev mode
 	if mode == RunModeDevelopment {
-		cfg.Server.Port = readFrontendJsonConfig().BackendPort
+		cfg.Server.Port = readFrontendJsonConfig().ServerPort
 	}
 
 	return cfg

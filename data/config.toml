@@ -1,6 +1,6 @@
 # This is configuration file
 
-# Backend server
+# Server
 [server]
 port = 3000
 

@@ -11,7 +11,7 @@
             <p>This is the <strong>Golang-SvelteKit Boilerplate</strong> — a fullstack starter kit combining:</p>
             <ul>
                 <li><strong>SvelteKit</strong> — Modern frontend framework</li>
-                <li><strong>Golang</strong> — Backend with embedded frontend</li>
+                <li><strong>Golang</strong> — Server with embedded frontend</li>
                 <li><strong>Bulma</strong> — CSS framework</li>
                 <li><strong>Admin One</strong> — Dashboard template</li>
             </ul>

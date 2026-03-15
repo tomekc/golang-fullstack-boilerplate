@@ -5,7 +5,7 @@ import devConfig from './devconfig.json'
 
 export function baseURL() : string {
     if (dev) {
-        return `http://localhost:${devConfig.backend_port}`;
+        return `http://localhost:${devConfig.server_port}`;
     } else {
         return ''
     }

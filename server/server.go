@@ -6,19 +6,20 @@ import (
 	"log"
 	"net/http"
 
-	"boilerplate/backend/config"
+	"boilerplate/server/config"
+	"boilerplate/server/middleware"
 )
 
 type Server struct {
 	ListenPort       int
 	apiMux           *http.ServeMux
 	staticFS         embed.FS
-	globalMiddleware []Middleware
+	globalMiddleware []middleware.Middleware
 }
 
-func New(server config.Server, staticFS embed.FS, middlewares ...Middleware) *Server {
+func New(cfg config.Server, staticFS embed.FS, middlewares ...middleware.Middleware) *Server {
 	return &Server{
-		ListenPort:       server.Port,
+		ListenPort:       cfg.Port,
 		apiMux:           http.NewServeMux(),
 		staticFS:         staticFS,
 		globalMiddleware: middlewares,
@@ -28,7 +29,9 @@ func New(server config.Server, staticFS embed.FS, middlewares ...Middleware) *Se
 func (s *Server) Start() {
 	// Create root router
 	rootMux := http.NewServeMux()
-	decoratedMux := Chain(s.apiMux, s.globalMiddleware...)
+	decoratedMux := middleware.Chain(s.apiMux, s.globalMiddleware...)
+
+	// API handlers
 	rootMux.Handle("/api/", http.StripPrefix("/api", decoratedMux))
 
 	// Serve static files

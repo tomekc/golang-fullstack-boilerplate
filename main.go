@@ -4,9 +4,9 @@ import (
 	"embed"
 	"log"
 
-	"boilerplate/backend/config"
-	"boilerplate/backend/hello"
-	"boilerplate/backend/server"
+	"boilerplate/server"
+	"boilerplate/server/config"
+	"boilerplate/server/middleware"
 )
 
 //go:embed all:frontend/webapp/build
@@ -20,7 +20,8 @@ func main() {
 	banner()
 	cfg := config.Load()
 
-	httpServer := server.New(cfg.Server, staticFiles, server.LoggingMiddleware, server.CORSMiddleware)
-	httpServer.ApiEndpoint("GET /hello", hello.Handler)
+	// Create server and configure routes
+	httpServer := server.New(cfg.Server, staticFiles, middleware.LoggingMiddleware, middleware.CORSMiddleware)
+	httpServer.AddAPIRoutes() // All endpoints are under /api prefix
 	httpServer.Start()
 }

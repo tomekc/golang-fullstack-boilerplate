@@ -27,8 +27,8 @@ COPY go.mod go.sum* ./
 # Download dependencies
 RUN go mod download
 
-# Copy backend source
-COPY backend/ backend/
+# Copy server source
+COPY server/ server/
 COPY main.go .
 
 # Copy built frontend from previous stage
