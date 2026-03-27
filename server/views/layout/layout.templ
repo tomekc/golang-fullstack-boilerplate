@@ -1,0 +1,26 @@
+package layout
+
+import "boilerplate/server/views/components"
+
+templ Layout(currentPath string) {
+	<!DOCTYPE html>
+	<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
+		<head>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Admin One - HTMX + Templ</title>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css"/>
+			<link rel="dns-prefetch" href="https://fonts.gstatic.com"/>
+			<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"/>
+			<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css"/>
+			<link rel="stylesheet" href="/static/admin-one.css"/>
+			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+		</head>
+		<body>
+			@components.Navbar()
+			@components.Sidebar(currentPath)
+			{ children... }
+			@components.Footer()
+		</body>
+	</html>
+}

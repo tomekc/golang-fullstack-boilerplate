@@ -1,0 +1,34 @@
+package components
+
+templ sidebarMenuItem(label, href, icon string, active bool) {
+	<li>
+		<a
+			href={ templ.SafeURL(href) }
+			class={ "has-icon", templ.KV("is-active", active) }
+		>
+			<span class="icon"><i class={ "mdi mdi-" + icon }></i></span>
+			<span class="menu-item-label">{ label }</span>
+		</a>
+	</li>
+}
+
+templ Sidebar(currentPath string) {
+	<aside class="aside is-placed-left is-expanded">
+		<div class="aside-tools">
+			<div class="aside-tools-label">
+				<span><b>Admin</b> One</span>
+			</div>
+		</div>
+		<div class="menu is-menu-main">
+			<p class="menu-label">General</p>
+			<ul class="menu-list">
+				@sidebarMenuItem("Dashboard", "/", "desktop-mac", currentPath == "/")
+			</ul>
+			<p class="menu-label">Examples</p>
+			<ul class="menu-list">
+				@sidebarMenuItem("Hello API", "/hello", "clock-outline", currentPath == "/hello")
+				@sidebarMenuItem("About", "/about", "help-circle", currentPath == "/about")
+			</ul>
+		</div>
+	</aside>
+}

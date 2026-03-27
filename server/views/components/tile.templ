@@ -1,0 +1,25 @@
+package components
+
+templ Tile(label, value, icon, color string) {
+	<div class="column">
+		<div class="card">
+			<div class="card-content">
+				<div class="level is-mobile">
+					<div class="level-item">
+						<div class="is-widget-label">
+							<h3 class="subtitle is-spaced">{ label }</h3>
+							<h1 class="title">{ value }</h1>
+						</div>
+					</div>
+					<div class="level-item has-widget-icon">
+						<div class="is-widget-icon">
+							<span class={ "icon is-large has-text-" + color }>
+								<i class={ "mdi mdi-" + icon + " mdi-48px" }></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

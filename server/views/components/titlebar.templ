@@ -1,0 +1,17 @@
+package components
+
+templ TitleBar(breadcrumbs []string) {
+	<section class="section is-title-bar">
+		<div class="level">
+			<div class="level-left">
+				<div class="level-item">
+					<ul>
+						for _, crumb := range breadcrumbs {
+							<li>{ crumb }</li>
+						}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+}

@@ -22,6 +22,13 @@ const (
 	RunModeDocker
 )
 
+type FrontendStack string
+
+const (
+	FrontendSvelte FrontendStack = "Svelte"
+	FrontendTempl  FrontendStack = "Templ"
+)
+
 type Config struct {
 	RunMode RunMode
 	DataDir string
@@ -29,7 +36,8 @@ type Config struct {
 }
 
 type Server struct {
-	Port int `toml:"port"`
+	Port     int           `toml:"port"`
+	Frontend FrontendStack `toml:"frontend"`
 }
 
 type frontendConfig struct {

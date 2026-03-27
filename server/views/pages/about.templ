@@ -1,0 +1,49 @@
+package pages
+
+import (
+	"boilerplate/server/views/layout"
+	"boilerplate/server/views/components"
+)
+
+templ About() {
+	@layout.Layout("/about") {
+		@components.TitleBar([]string{"Admin", "About"})
+		@components.HeroBar("About")
+		<section class="section is-main-section">
+			@components.Card("About this project", "help-circle", false) {
+				<div class="content">
+					<p>
+						This is a <strong>Golang Fullstack Boilerplate</strong> project demonstrating two frontend approaches:
+					</p>
+					<ul>
+						<li>
+							<strong>SvelteKit SPA</strong> - A modern JavaScript framework with client-side rendering,
+							embedded into the Go binary at build time.
+						</li>
+						<li>
+							<strong>HTMX + Templ</strong> - Server-side rendered HTML using Templ template language and HTMX for dynamic interactions without writing JavaScript.
+						</li>
+					</ul>
+					<p>
+						Switch between frontends via <code>frontend</code> in
+						<code>data/config.toml</code>.
+					</p>
+					@aboutTechStack()
+				</div>
+			}
+		</section>
+	}
+}
+
+templ aboutTechStack() {
+	<h4 class="title is-5">Technology Stack</h4>
+	<table class="table is-bordered">
+		<tbody>
+			<tr><th>Backend</th><td>Go (net/http stdlib)</td></tr>
+			<tr><th>CSS Framework</th><td>Bulma</td></tr>
+			<tr><th>Template</th><td>Admin One Bulma Dashboard (MIT License)</td></tr>
+			<tr><th>Server Rendering</th><td>Templ + HTMX</td></tr>
+			<tr><th>Icons</th><td>Material Design Icons</td></tr>
+		</tbody>
+	</table>
+}

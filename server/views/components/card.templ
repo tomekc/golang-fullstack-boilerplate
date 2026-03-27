@@ -1,0 +1,19 @@
+package components
+
+templ Card(title, icon string, hasTable bool) {
+	<div class={ "card", templ.KV("has-table", hasTable) }>
+		if title != "" {
+			<header class="card-header">
+				<p class="card-header-title">
+					if icon != "" {
+						<span class="icon"><i class={ "mdi mdi-" + icon }></i></span>
+					}
+					{ title }
+				</p>
+			</header>
+		}
+		<div class="card-content">
+			{ children... }
+		</div>
+	</div>
+}

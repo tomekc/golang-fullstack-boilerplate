@@ -1,0 +1,63 @@
+package pages
+
+import (
+	"boilerplate/server/views/layout"
+	"boilerplate/server/views/components"
+)
+
+templ Hello() {
+	@layout.Layout("/hello") {
+		@components.TitleBar([]string{"Admin", "Hello API"})
+		@components.HeroBar("Hello API")
+		<section class="section is-main-section">
+			<div class="columns">
+				<div class="column">
+					@components.Card("Server Time", "clock-outline", false) {
+						<p class="mb-4">Click the button to fetch the current server time using <strong>HTMX</strong>.</p>
+						<p class="mb-4">
+							This demonstrates <code>hx-get</code> — the button sends a GET request to <code>/htmx/time</code>
+							and the response HTML fragment replaces the content of the target div.
+						</p>
+						<button
+							class="button is-primary"
+							hx-get="/htmx/time"
+							hx-target="#time-result"
+							hx-swap="innerHTML"
+							hx-indicator="#time-spinner"
+						>
+							<span class="icon"><i class="mdi mdi-clock-outline"></i></span>
+							<span>Get Server Time</span>
+						</button>
+						<span id="time-spinner" class="htmx-indicator ml-2">
+							<span class="icon"><i class="mdi mdi-loading mdi-spin"></i></span>
+						</span>
+						<div id="time-result" class="mt-4"></div>
+					}
+				</div>
+				<div class="column">
+					@components.Card("Echo POST", "send", false) {
+						<p class="mb-4">Click the button to send a POST request using <strong>HTMX</strong>.</p>
+						<p class="mb-4">
+							This demonstrates <code>hx-post</code> — the server inspects request headers
+							and echoes back information as an HTML table fragment.
+						</p>
+						<button
+							class="button is-info"
+							hx-post="/htmx/echo"
+							hx-target="#echo-result"
+							hx-swap="innerHTML"
+							hx-indicator="#echo-spinner"
+						>
+							<span class="icon"><i class="mdi mdi-send"></i></span>
+							<span>Send Echo</span>
+						</button>
+						<span id="echo-spinner" class="htmx-indicator ml-2">
+							<span class="icon"><i class="mdi mdi-loading mdi-spin"></i></span>
+						</span>
+						<div id="echo-result" class="mt-4"></div>
+					}
+				</div>
+			</div>
+		</section>
+	}
+}
