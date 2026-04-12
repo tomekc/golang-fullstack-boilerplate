@@ -13,7 +13,11 @@ templ EchoResult(headers map[string]string) {
 		</thead>
 		<tbody>
 			for key, value := range headers {
-				<tr>
+				<tr
+				    if key == "Body" {
+				        class="is-warning"
+				    }
+				>
 					<td><strong>{ key }</strong></td>
 					<td>{ value }</td>
 				</tr>

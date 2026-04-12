@@ -15,7 +15,7 @@ templ-generate:
 	templ generate
 
 templ-watch:
-	templ generate --watch --proxy="http://localhost:3001" --cmd="DEV=1 go run main.go"
+	templ generate --watch --proxy="http://localhost:3000" --cmd="go run main.go"
 
 run-templ:
 	templ generate && DEV=1 go run main.go

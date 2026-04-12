@@ -1,6 +1,7 @@
 package views
 
 import (
+	"io"
 	"net/http"
 	"time"
 
@@ -26,6 +27,7 @@ func HtmxGetTime(w http.ResponseWriter, r *http.Request) {
 }
 
 func HtmxEcho(w http.ResponseWriter, r *http.Request) {
+	body, _ := io.ReadAll(r.Body)
 	info := map[string]string{
 		"Method":      r.Method,
 		"Remote Addr": r.RemoteAddr,
@@ -34,6 +36,7 @@ func HtmxEcho(w http.ResponseWriter, r *http.Request) {
 		"HX-Request":  r.Header.Get("HX-Request"),
 		"HX-Target":   r.Header.Get("HX-Target"),
 		"Timestamp":   time.Now().Format(time.RFC3339),
+		"Body":        string(body),
 	}
 	fragments.EchoResult(info).Render(r.Context(), w)
 }
