@@ -14,7 +14,7 @@ func Chain(h http.Handler, m ...Middleware) http.Handler {
 	return h
 }
 
-func LoggingMiddleware(next http.Handler) http.Handler {
+func Logging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		rec := &flightRecorder{ResponseWriter: w}
 		next.ServeHTTP(rec, r)
@@ -22,7 +22,7 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func CORSMiddleware(next http.Handler) http.Handler {
+func CORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

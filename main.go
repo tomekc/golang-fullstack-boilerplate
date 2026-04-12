@@ -18,8 +18,8 @@ func main() {
 
 	// Create server and configure routes
 	httpServer := server.New(cfg.Server)
-	httpServer.Use(middleware.LoggingMiddleware)
-	httpServer.Use(middleware.CORSMiddleware)
+	httpServer.Use(middleware.Logging)
+	httpServer.Use(middleware.CORS)
 	httpServer.RegisterAPIRoutes() // All endpoints are under /api prefix. Inject any dependencies here.
 	httpServer.Start()
 }

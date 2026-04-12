@@ -5,7 +5,7 @@ import "net/http"
 // flightRecorder is a response wrapper that captures the HTTP status code.
 // By default, http.ResponseWriter doesn't expose the status code after it's been written.
 // flightRecorder embeds http.ResponseWriter and overrides WriteHeader to intercept
-// and store the status code, enabling LoggingMiddleware to log it.
+// and store the status code, enabling Logging to log it.
 type flightRecorder struct {
 	http.ResponseWriter
 	Status int
