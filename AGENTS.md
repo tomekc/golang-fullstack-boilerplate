@@ -4,104 +4,74 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Go + SvelteKit fullstack boilerplate that embeds the frontend build into the Go binary for self-contained deployment. The Go server serves both API endpoints and the static frontend files.
+This is a Go fullstack boilerplate using HTMX + Templ for server-side rendering. The entire application compiles to a single binary with embedded static assets. No JavaScript framework — dynamic interactions are handled by HTMX, and HTML is rendered server-side using Templ templates.
 
 ## Project Structure
 
-**Workspace Organization:**
-- Root uses npm workspaces (pattern: `frontend/*`)
-- Frontend webapp: `frontend/webapp/` (package: `@gofullstack/webapp`)
-- Root-level npm commands delegate to workspaces using `-w` flag
-
-**Frontend Structure:**
-- Standard SvelteKit project at `frontend/webapp/`
-- Source code in `frontend/webapp/src/` directory
-- Routes in `frontend/webapp/src/routes/`
-- Shared utilities and config in `frontend/webapp/src/lib/`
-- Build output goes to `frontend/webapp/build/`
-
-**Server Structure:**
-- API handlers organized by feature in `server/` (e.g., `server/hello/handler.go`)
-- Server framework in `server/server/`
-- Configuration management in `server/config/`
+- `main.go` — entry point; creates Application, starts HTTP server
+- `server/app.go` — `Application` struct holding config, logger, services
+- `server/routes.go` — route registration and HTTP handlers (methods on Application)
+- `server/server.go` — HTTP server struct, middleware wiring
+- `server/config/config.go` — TOML config loading from `data/config.toml`
+- `server/middleware/` — request logging (`Logging`), CORS middleware, `flightRecorder`
+- `server/rest/responses.go` — JSON response helper (`rest.Ok`)
+- `server/services/` — business logic services injected into Application
+- `server/views/` — Templ templates and embedded static files:
+  - `layout/` — base HTML layout wrapping all pages
+  - `pages/` — full page templates (dashboard, hello, about)
+  - `components/` — reusable UI components (navbar, sidebar, card, tile, etc.)
+  - `fragments/` — HTMX partial response templates
+  - `static/` — CSS files, embedded via `//go:embed`
+  - `static.go` — serves embedded static files at `/static/`
 
 ## Architecture
 
-**Dual-Server Development Setup:**
-- Frontend dev server runs on port 3000 (Vite/SvelteKit)
-- Go API server runs on port 3001
-- In development, frontend proxies API requests to the server via `baseURL()` helper in `frontend/webapp/src/lib/config.ts`
+**Application struct** (`server/app.go`) is the central dependency container, created early in `main()`. It holds configuration, logger, and services. Route handlers are methods on Application, defined in `server/routes.go`.
 
-**Production Build:**
-- SvelteKit builds to `frontend/webapp/build/` directory
-- Go binary embeds these files using `//go:embed all:frontend/webapp/build` in `main.go`
-- Static files served from embedded filesystem via `server/server/static.go`
-- Single deployable binary contains everything
+**Request flow:**
+1. `main.go` loads config, creates `Application`, creates `Server`
+2. `Server.Start()` registers middleware (Logging, CORS), calls `app.RegisterRoutes(mux)`, registers static file routes
+3. Requests pass through middleware chain → handler methods on Application
 
-**API Routing:**
-- All API endpoints are under `/api/` prefix
-- Main router in `server/server/server_main.go` strips `/api` prefix before passing to API mux
-- Static file server handles root path `/` for all non-API routes
+**Templ templates** (`.templ` files) compile to Go code (`_templ.go` files). Run `templ generate` after modifying `.templ` files. Generated `_templ.go` files are committed to the repo.
+
+**Services** are structs in `server/services/` injected into Application. `ExampleService` is a placeholder meant to be replaced.
 
 ## Development Commands
 
-**Start frontend dev server (from root):**
+**Run the server:**
 ```sh
-npm run dev
-```
-Runs on port 3000 with auto-reload. Delegates to workspace: `@gofullstack/webapp`
-
-**Start Go server:**
-```sh
-go run main.go
-```
-Runs on port 3001, serves API endpoints and embedded static files
-
-**Type checking (from root or webapp directory):**
-```sh
-npm run check
-```
-For continuous type checking:
-```sh
-npm run check:watch
+make run
 ```
 
-**Linting (from webapp directory):**
+**Run with Templ file watching (auto-reload on template changes):**
 ```sh
-cd frontend/webapp
-npm run lint
+make templ-watch
 ```
 
-**Production build (from root):**
+**Generate Templ code after editing .templ files:**
 ```sh
-npm run build
-```
-Outputs to `frontend/webapp/build/` directory
-
-**Preview production build (from webapp directory):**
-```sh
-cd frontend/webapp
-npm run preview
+make templ-generate
 ```
 
-**Working with specific workspace:**
+**Build production binary:**
 ```sh
-# Run commands in webapp workspace from root
-npm run <script> -w @gofullstack/webapp
+make build
 ```
+Outputs to `bin/server`.
 
-## Adding New API Endpoints
+## Adding New Functionality
 
-1. Create a new package in `server/` (e.g., `server/users/`)
-2. Implement handler function with signature `func(w http.ResponseWriter, r *http.Request)`
-3. Register in `main.go` using `httpServer.ApiEndpoint("GET /endpoint", handler.Function)`
-4. API will be available at `/api/endpoint`
+**New page:** Create `.templ` in `server/views/pages/`, run `templ generate`, add handler method and route in `server/routes.go`.
 
-## Key Configuration Files
+**New HTMX endpoint:** Create fragment `.templ` in `server/views/fragments/`, run `templ generate`, add handler and route in `server/routes.go`.
 
-- `package.json` (root) - Workspace configuration, delegating scripts to `@gofullstack/webapp`
-- `frontend/webapp/svelte.config.js` - SvelteKit adapter configured to build to `build/` directory
-- `frontend/webapp/src/lib/config.ts` - Contains `baseURL()` helper for API server URL (dev/prod)
-- `main.go` - Embeds static files and configures server with API routes
-- `server/server/server_main.go` - Server struct and routing setup
-- `server/server/static.go` - Static file serving from embedded filesystem
+**New service:** Create struct in `server/services/`, add as field in `Application` (`server/app.go`), initialize in `NewApplication()`.
+
+**New JSON API endpoint:** Add handler method on Application using `rest.Ok(w, data)`, register route in `server/routes.go`.
+
+## Key Configuration
+
+- `data/config.toml` — server port and app configuration (TOML format)
+- Module name: `boilerplate` (in `go.mod`)
+- Default port: 3000

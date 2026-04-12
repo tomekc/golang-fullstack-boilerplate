@@ -30,8 +30,7 @@ func (s *Server) Start() {
 	s.Use(middleware.Logging)
 	s.Use(middleware.CORS)
 
-	handlers := views.NewHandlers(s.app.ExampleService)
-	views.RegisterPageRoutes(rootMux, handlers)
+	s.app.RegisterRoutes(rootMux)
 	views.RegisterStaticRoutes(rootMux)
 
 	addr := fmt.Sprintf(":%d", s.app.Config.Server.Port)

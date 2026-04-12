@@ -4,7 +4,8 @@
 
 ### Just two ingredients
 
-* **SvelteKit** front-end
+* **HTMX** for interactivity
+* **Templ** for server-side HTML templates
 * **Golang** server
 
 This project is a self-contained, simple web application you can use for
@@ -25,104 +26,113 @@ it is TOML parser.
 readable for humans, [YAML is creature from hell](https://ruudvanasseldonk.com/2023/01/11/the-yaml-document-from-hell), and [the most popular YAML parser](https://github.com/goccy/go-yaml) is not 
 developed anymore but with 100+ issues and 30+ pull requests.
 
-**Frontend files are embedded** in binary, so ultimately entire app is just single file (and configuration).
+### Front-end: HTMX + Templ
+
+Pages are rendered server-side using [Templ](https://templ.guide/) templates compiled to Go code.
+Dynamic interactions are handled by [HTMX](https://htmx.org/) — no JavaScript framework needed.
+Static assets (CSS) are embedded in the binary.
+
+**The entire app is a single binary** (plus configuration file).
 
 ## Project Structure
 
-### Front-end
+### Application
 
-This project uses npm workspaces:
-- Root workspace manages the overall project
-- Frontend webapp is located at `frontend/webapp/`
-- The webapp follows standard SvelteKit project structure with `src/` directory
+The `Application` struct (`server/app.go`) is the central component that holds all dependencies:
+configuration, logger, services, and (in the future) database connections. It is created early
+during startup and passed to the HTTP server.
 
-### Server
+Route handlers are methods on `Application`, defined in `server/routes.go`.
 
-All server endpoints are supposed to be under `/api` path.
-All other paths are considered static HTML and served by result of build of the Svelte app.
-Example server implement just one endpoint:
+### Packages and files
 
-```http request
-GET /api/hello
-```
+- `main.go` — entry point, creates Application and starts the server
+- `server/` — root package for all server code:
+  - `app.go` — `Application` struct: groups config, logger, and services
+  - `routes.go` — route registration and HTTP handlers (methods on Application)
+  - `server.go` — HTTP server, middleware setup
+  - `config/` — TOML configuration loading
+  - `middleware/` — request logging, CORS
+  - `rest/` — JSON response helpers
+  - `services/` — business logic (e.g. `ExampleService`)
+  - `views/` — Templ templates and static assets:
+    - `layout/` — base HTML layout
+    - `pages/` — full page templates (dashboard, hello, about)
+    - `components/` — reusable UI components (navbar, sidebar, card, tile, etc.)
+    - `fragments/` — HTMX partial response templates
+    - `static/` — CSS and other static files (embedded in binary)
 
-which returns current time. Just enough to present idea, simple enough to delete out of way.
+## Building on Top of This Boilerplate
 
-#### Packages and files
+### Adding a new page
 
-- `main.go` is entry point and is placed in project root, because some IDEs get totally confused if project starts somewhere else
-- `server/` is root package for all functional packages:
-  - `server` is boilerplate for HTTP server, middlewares, etc.
-  - `rest` helpers to build HTTP responses and serialize to JSON
-  - `hello` implements logic of `/api/hello` 
+1. Create a `.templ` file in `server/views/pages/`
+2. Run `templ generate` (or `make templ-generate`)
+3. Add a handler method on `Application` in `server/routes.go`
+4. Register the route in `Application.RegisterRoutes()`
+
+### Adding a new HTMX endpoint
+
+1. Create a fragment template in `server/views/fragments/`
+2. Run `templ generate`
+3. Add a handler method on `Application` in `server/routes.go`
+4. Register the route in `Application.RegisterRoutes()`
+5. Add `hx-get` or `hx-post` attributes to your page template
+
+### Adding a new service
+
+1. Create a file in `server/services/` with your service struct
+2. Add the service as a field in `Application` (`server/app.go`)
+3. Initialize it in `NewApplication()`
+4. Use it from handler methods via `app.YourService`
+
+### Adding an API endpoint (JSON)
+
+1. Add a handler method on `Application` in `server/routes.go`
+2. Use `rest.Ok(w, data)` to return JSON responses
+3. Register the route in `Application.RegisterRoutes()`
+
+### Removing the example service
+
+Delete `server/services/example.go`, remove the `ExampleService` field from `Application`
+in `server/app.go`, and remove or replace the `HtmxGetTime` and `HtmxEcho` handlers in
+`server/routes.go`.
 
 ## Developing
 
-Start frontend
+Start the server with Templ watching for changes:
 
 ```shell
-npm run dev
+make templ-watch
 ```
 
-Will start Svelte app in auto-reloading mode on port **3000**. 
-The app will **automatically detect that** and call server on port **3001**.
+This runs `templ generate --watch` with a proxy, auto-reloading on template changes.
 
-Start server from your IDE with the `-dev` command line parameter, or:
+Or run manually:
 
 ```shell
-go run . -dev
+make run
 ```
 
-Server **will read port number** from `frontend/webapp/src/lib/devconfig.json` to make sure
-frontend and server are aligned. 
-
-## Modes of Operation
-
-### Production
-
-The production-built frontend code is embedded into the Go binary: the program is totally self-contained. The SvelteKit build output from `frontend/webapp/build/` is embedded at compile time.
-
-### Development
-
-Run the frontend in dev mode for auto-reloading and the server separately:
-
-**Frontend (from project root):**
-```sh
-npm run dev
-```
-
-**Server:**
-```sh
-go run main.go
-```
-
-The frontend dev server runs on port 3000, and the Go API server runs on port 3001.
+Server starts on port **3000** (configurable in `data/config.toml`).
 
 ## Building
 
-To create a production version:
-
 ```sh
-npm run build
+make build
 ```
 
-This builds the SvelteKit app to `frontend/webapp/build/`. When you compile the Go binary, these files are embedded automatically.
-
-You can preview the production build with `npm run preview`.
+This generates Templ code and compiles the Go binary to `bin/server`.
 
 ## Docker
 
 ### Building the Docker image
-
-Build the container image:
 
 ```sh
 docker build -t golang-fullstack-boilerplate .
 ```
 
 ### Running the container
-
-Run the container with the data directory mounted:
 
 ```sh
 docker run -d \
@@ -135,7 +145,6 @@ docker run -d \
 This will:
 - Map port 3000 on your host to port 3000 in the container
 - Mount the `data/` directory from your project to `/data` in the container
-- Run the application with the `-docker` flag
 
 ### Stopping the container
 
