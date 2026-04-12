@@ -33,6 +33,5 @@ RUN mkdir -p /data
 # Expose port
 EXPOSE 3000
 
-# Run with -docker flag
 ENTRYPOINT ["./server"]
-CMD ["-docker"]
+CMD ["-datadir", "/data"]

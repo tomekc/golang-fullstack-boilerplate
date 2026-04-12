@@ -21,23 +21,13 @@ type Server struct {
 	Port int `toml:"port"`
 }
 
-func isTruthy(s string) bool {
-	switch s {
-	case "1", "t", "T", "true", "TRUE", "True", "yes", "YES", "Yes", "on", "ON", "On":
-		return true
-	}
-	return false
-}
-
 func Load() Config {
-	devMode := flag.Bool("dev", false, "Development mode: runs server only on port ")
-	dockerMode := flag.Bool("docker", false, "Docker mode: self contained, run in container")
+	dataDir := flag.String("datadir", "./"+dataDirectory, "Path to the data directory")
 	flag.Parse()
 
-	dataDir := determineRunMode(*devMode || isTruthy(os.Getenv("DEV")), *dockerMode)
-	cfg := defaultConfig(dataDir)
+	cfg := defaultConfig(*dataDir)
 	// parse config file
-	configFilePath := fmt.Sprintf("%s/config.toml", dataDir)
+	configFilePath := fmt.Sprintf("%s/config.toml", *dataDir)
 	b, err := os.ReadFile(configFilePath)
 	if err != nil {
 		log.Fatalf("Failed to read config file: %v", err)
@@ -55,20 +45,5 @@ func Load() Config {
 func defaultConfig(dataDir string) Config {
 	return Config{
 		DataDir: dataDir,
-	}
-}
-
-func determineRunMode(devMode bool, dockerMode bool) string {
-	if devMode && dockerMode {
-		log.Fatalf("Illegal combination of dev and docker mode")
-	}
-	if devMode {
-		return "./" + dataDirectory
-	} else if dockerMode {
-		log.Printf("Running in docker mode")
-		return "/" + dataDirectory
-	} else {
-		log.Printf("Running in standalone mode")
-		return "./" + dataDirectory
 	}
 }
