@@ -16,9 +16,9 @@ func Chain(h http.Handler, m ...Middleware) http.Handler {
 
 func Logging(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		rec := &flightRecorder{ResponseWriter: w}
+		rec := newFlightRecorder(w)
 		next.ServeHTTP(rec, r)
-		log.Printf("(%v) %s %s", rec.Status, r.Method, r.URL.Path)
+		log.Printf("(%d) %s %s %db", rec.Status, r.Method, r.URL.Path, rec.BytesWritten)
 	})
 }
 

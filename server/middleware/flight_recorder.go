@@ -2,17 +2,23 @@ package middleware
 
 import "net/http"
 
-// flightRecorder is a response wrapper that captures the HTTP status code.
-// By default, http.ResponseWriter doesn't expose the status code after it's been written.
-// flightRecorder embeds http.ResponseWriter and overrides WriteHeader to intercept
-// and store the status code, enabling Logging to log it.
 type flightRecorder struct {
 	http.ResponseWriter
-	Status int
+	Status       int
+	BytesWritten int
 }
 
-// WriteHeader intercepts the status code, stores it in Status, and passes it through to the real writer.
+func newFlightRecorder(w http.ResponseWriter) *flightRecorder {
+	return &flightRecorder{ResponseWriter: w, Status: http.StatusOK}
+}
+
 func (r *flightRecorder) WriteHeader(code int) {
 	r.Status = code
 	r.ResponseWriter.WriteHeader(code)
+}
+
+func (r *flightRecorder) Write(b []byte) (int, error) {
+	n, err := r.ResponseWriter.Write(b)
+	r.BytesWritten += n
+	return n, err
 }

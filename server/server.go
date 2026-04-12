@@ -12,14 +12,12 @@ import (
 
 type Server struct {
 	ListenPort       int
-	apiMux           *http.ServeMux
 	globalMiddleware []middleware.Middleware
 }
 
 func New(cfg config.Server) *Server {
 	return &Server{
 		ListenPort: cfg.Port,
-		apiMux:     http.NewServeMux(),
 	}
 }
 
@@ -28,22 +26,18 @@ func (s *Server) Use(m middleware.Middleware) {
 }
 
 func (s *Server) Start() {
-	// Create root router
 	rootMux := http.NewServeMux()
-	decoratedMux := middleware.Chain(s.apiMux, s.globalMiddleware...)
 
-	// API handlers
-	rootMux.Handle("/api/", http.StripPrefix("/api", decoratedMux))
+	s.Use(middleware.Logging)
+	s.Use(middleware.CORS)
 
-	// Serve frontend
-	log.Println("Frontend: Templ + HTMX (server-side rendering)")
 	views.RegisterPageRoutes(rootMux)
 	views.RegisterStaticRoutes(rootMux)
 
 	addr := fmt.Sprintf(":%d", s.ListenPort)
 	log.Printf("Server listening on %s\n", addr)
 
-	if err := http.ListenAndServe(addr, rootMux); err != nil {
+	if err := http.ListenAndServe(addr, middleware.Chain(rootMux, s.globalMiddleware...)); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
 
