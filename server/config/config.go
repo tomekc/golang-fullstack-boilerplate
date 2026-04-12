@@ -9,19 +9,10 @@ import (
 	toml "github.com/pelletier/go-toml/v2"
 )
 
-type RunMode int
-
 // Parent folder of data directory: for configuration, caches, etc
 const dataDirectory = "data"
 
-const (
-	RunModeStandalone = iota
-	RunModeDevelopment
-	RunModeDocker
-)
-
 type Config struct {
-	RunMode RunMode
 	DataDir string
 	Server  Server `toml:"server"`
 }
@@ -43,8 +34,8 @@ func Load() Config {
 	dockerMode := flag.Bool("docker", false, "Docker mode: self contained, run in container")
 	flag.Parse()
 
-	dataDir, mode := determineRunMode(*devMode || isTruthy(os.Getenv("DEV")), *dockerMode)
-	cfg := defaultConfig(dataDir, mode)
+	dataDir := determineRunMode(*devMode || isTruthy(os.Getenv("DEV")), *dockerMode)
+	cfg := defaultConfig(dataDir)
 	// parse config file
 	configFilePath := fmt.Sprintf("%s/config.toml", dataDir)
 	b, err := os.ReadFile(configFilePath)
@@ -61,24 +52,23 @@ func Load() Config {
 	return cfg
 }
 
-func defaultConfig(dataDir string, mode RunMode) Config {
+func defaultConfig(dataDir string) Config {
 	return Config{
-		RunMode: mode,
 		DataDir: dataDir,
 	}
 }
 
-func determineRunMode(devMode bool, dockerMode bool) (string, RunMode) {
+func determineRunMode(devMode bool, dockerMode bool) string {
 	if devMode && dockerMode {
 		log.Fatalf("Illegal combination of dev and docker mode")
 	}
 	if devMode {
-		return "./" + dataDirectory, RunModeDevelopment
+		return "./" + dataDirectory
 	} else if dockerMode {
 		log.Printf("Running in docker mode")
-		return "/" + dataDirectory, RunModeDocker
+		return "/" + dataDirectory
 	} else {
 		log.Printf("Running in standalone mode")
-		return "./" + dataDirectory, RunModeStandalone
+		return "./" + dataDirectory
 	}
 }
