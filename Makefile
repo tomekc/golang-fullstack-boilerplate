@@ -7,7 +7,6 @@ run-dev:
 	DEV=1 go run main.go
 
 build:
-	npm run build
 	templ generate
 	go build -o bin/server main.go
 

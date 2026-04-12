@@ -1,7 +1,6 @@
 package config
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -14,19 +13,11 @@ type RunMode int
 
 // Parent folder of data directory: for configuration, caches, etc
 const dataDirectory = "data"
-const devConfigPath = "frontend/webapp/src/lib/devconfig.json"
 
 const (
 	RunModeStandalone = iota
 	RunModeDevelopment
 	RunModeDocker
-)
-
-type FrontendStack string
-
-const (
-	FrontendSvelte FrontendStack = "Svelte"
-	FrontendTempl  FrontendStack = "Templ"
 )
 
 type Config struct {
@@ -36,25 +27,7 @@ type Config struct {
 }
 
 type Server struct {
-	Port     int           `toml:"port"`
-	Frontend FrontendStack `toml:"frontend"`
-}
-
-type frontendConfig struct {
-	ServerPort int `json:"server_port"`
-}
-
-func readFrontendJsonConfig() frontendConfig {
-	b, err := os.ReadFile(devConfigPath)
-	if err != nil {
-		log.Fatalf("Failed to read frontend config: %v", err)
-	}
-	cfg := frontendConfig{}
-	err = json.Unmarshal(b, &cfg)
-	if err != nil {
-		log.Fatalf("Failed to parse frontend config: %v", err)
-	}
-	return cfg
+	Port int `toml:"port"`
 }
 
 func isTruthy(s string) bool {
@@ -85,11 +58,6 @@ func Load() Config {
 
 	log.Printf("Configuration loaded from: %s", configFilePath)
 
-	// Override server port in dev mode
-	if mode == RunModeDevelopment {
-		cfg.Server.Port = readFrontendJsonConfig().ServerPort
-	}
-
 	return cfg
 }
 
@@ -105,7 +73,6 @@ func determineRunMode(devMode bool, dockerMode bool) (string, RunMode) {
 		log.Fatalf("Illegal combination of dev and docker mode")
 	}
 	if devMode {
-		log.Printf("Running in development mode, reading port from %s", devConfigPath)
 		return "./" + dataDirectory, RunModeDevelopment
 	} else if dockerMode {
 		log.Printf("Running in docker mode")

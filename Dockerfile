@@ -1,22 +1,4 @@
-# Stage 1: Build frontend
-FROM node:20-alpine AS frontend-builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package.json package-lock.json ./
-COPY frontend/webapp/package.json frontend/webapp/
-
-# Install dependencies
-RUN npm ci
-
-# Copy frontend source
-COPY frontend/ frontend/
-
-# Build frontend
-RUN npm run build
-
-# Stage 2: Build Go binary
+# Stage 1: Build Go binary
 FROM golang:1.24-alpine AS go-builder
 
 WORKDIR /app
@@ -31,13 +13,10 @@ RUN go mod download
 COPY server/ server/
 COPY main.go .
 
-# Copy built frontend from previous stage
-COPY --from=frontend-builder /app/frontend/webapp/build ./frontend/webapp/build
-
 # Build Go binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o server .
 
-# Stage 3: Final runtime image
+# Stage 2: Final runtime image
 FROM alpine:latest
 
 # Install ca-certificates for HTTPS requests

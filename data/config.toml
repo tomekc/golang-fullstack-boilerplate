@@ -3,5 +3,3 @@
 # Server
 [server]
 port = 3000
-frontend = "Templ"
-
