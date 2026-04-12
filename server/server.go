@@ -5,19 +5,18 @@ import (
 	"log"
 	"net/http"
 
-	"boilerplate/server/config"
 	"boilerplate/server/middleware"
 	"boilerplate/server/views"
 )
 
 type Server struct {
-	ListenPort       int
+	app              *Application
 	globalMiddleware []middleware.Middleware
 }
 
-func New(cfg config.Server) *Server {
+func NewServer(app *Application) *Server {
 	return &Server{
-		ListenPort: cfg.Port,
+		app: app,
 	}
 }
 
@@ -31,14 +30,14 @@ func (s *Server) Start() {
 	s.Use(middleware.Logging)
 	s.Use(middleware.CORS)
 
-	views.RegisterPageRoutes(rootMux)
+	handlers := views.NewHandlers(s.app.ExampleService)
+	views.RegisterPageRoutes(rootMux, handlers)
 	views.RegisterStaticRoutes(rootMux)
 
-	addr := fmt.Sprintf(":%d", s.ListenPort)
+	addr := fmt.Sprintf(":%d", s.app.Config.Server.Port)
 	log.Printf("Server listening on %s\n", addr)
 
 	if err := http.ListenAndServe(addr, middleware.Chain(rootMux, s.globalMiddleware...)); err != nil {
 		log.Fatalf("Server failed to start: %v", err)
 	}
-
 }

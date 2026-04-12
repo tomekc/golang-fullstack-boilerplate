@@ -15,6 +15,7 @@ func main() {
 	banner()
 	cfg := config.Load()
 
-	httpServer := server.New(cfg.Server)
+	app := server.NewApplication(cfg)
+	httpServer := server.NewServer(app)
 	httpServer.Start()
 }
