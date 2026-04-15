@@ -12,9 +12,14 @@ import (
 // Parent folder of data directory: for configuration, caches, etc
 const dataDirectory = "data"
 
+type Database struct {
+	Path string `toml:"path"`
+}
+
 type Config struct {
-	DataDir string
-	Server  Server `toml:"server"`
+	DataDir  string
+	Server   Server   `toml:"server"`
+	Database Database `toml:"database"`
 }
 
 type Server struct {
@@ -44,6 +49,7 @@ func Load() Config {
 
 func defaultConfig(dataDir string) Config {
 	return Config{
-		DataDir: dataDir,
+		DataDir:  dataDir,
+		Database: Database{Path: dataDir + "/db.sqlite3"},
 	}
 }

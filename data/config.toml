@@ -3,3 +3,7 @@
 # Server
 [server]
 port = 3000
+
+# Database
+[database]
+path = "data/db.sqlite3"
