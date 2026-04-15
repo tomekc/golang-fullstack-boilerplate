@@ -16,7 +16,12 @@ func (app *Application) RegisterRoutes(mux *http.ServeMux) {
 }
 
 func (app *Application) DashboardPage(w http.ResponseWriter, r *http.Request) {
-	pages.Dashboard().Render(r.Context(), w)
+	clients, err := app.ExampleService.GetClients()
+	if err != nil {
+		http.Error(w, "failed to load clients", http.StatusInternalServerError)
+		return
+	}
+	pages.Dashboard(clients).Render(r.Context(), w)
 }
 
 func (app *Application) HelloPage(w http.ResponseWriter, r *http.Request) {

@@ -27,6 +27,6 @@ func NewApplication(cfg config.Config) *Application {
 		Config:         cfg,
 		Logger:         log.Default(),
 		DB:             db,
-		ExampleService: services.NewExampleService(),
+		ExampleService: services.NewExampleService(db),
 	}
 }

@@ -4,12 +4,31 @@ import (
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
-type ExampleService struct{}
+type Client struct {
+	ID       int    `db:"id"`
+	Name     string `db:"name"`
+	Company  string `db:"company"`
+	City     string `db:"city"`
+	Progress int    `db:"progress"`
+	Created  string `db:"created"`
+}
 
-func NewExampleService() *ExampleService {
-	return &ExampleService{}
+type ExampleService struct {
+	db *sqlx.DB
+}
+
+func NewExampleService(db *sqlx.DB) *ExampleService {
+	return &ExampleService{db: db}
+}
+
+func (s *ExampleService) GetClients() ([]Client, error) {
+	var clients []Client
+	err := s.db.Select(&clients, `SELECT id, name, company, city, progress, created FROM clients ORDER BY id`)
+	return clients, err
 }
 
 func (s *ExampleService) GetTime() string {

@@ -1,28 +1,13 @@
 package pages
 
 import (
+	"boilerplate/server/services"
 	"boilerplate/server/views/layout"
 	"boilerplate/server/views/components"
 	"fmt"
 )
 
-type Client struct {
-	Name     string
-	Company  string
-	City     string
-	Progress int
-	Created  string
-}
-
-var clients = []Client{
-	{Name: "Rebecca Bauch", Company: "Daugherty-Daniel", City: "South Cory", Progress: 79, Created: "Oct 25, 2020"},
-	{Name: "Felicita Yundt", Company: "Johns-Weissnat", City: "East Ariel", Progress: 67, Created: "Jan 8, 2020"},
-	{Name: "Mr. Larry Satterfield V", Company: "Hyatt Ltd", City: "Windlerburgh", Progress: 16, Created: "Dec 18, 2020"},
-	{Name: "Mr. Broderick Kub", Company: "Kshlerin, Bauch and Ernser", City: "New Kirstenport", Progress: 71, Created: "Sep 13, 2020"},
-	{Name: "Barry Weber", Company: "Schulist, Mosciski and Heidenreich", City: "East Violettestad", Progress: 80, Created: "Jul 24, 2020"},
-}
-
-templ Dashboard() {
+templ Dashboard(clients []services.Client) {
 	@layout.Layout("/") {
 		@components.TitleBar([]string{"Admin", "Dashboard"})
 		@components.HeroBar("Dashboard")
