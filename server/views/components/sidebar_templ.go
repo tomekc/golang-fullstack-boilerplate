@@ -132,7 +132,7 @@ func Sidebar(currentPath string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = sidebarMenuItem("Dashboard", "/", "desktop-mac", currentPath == "/").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = sidebarMenuItem("Dashboard", "/dashboard", "desktop-mac", currentPath == "/dashboard").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

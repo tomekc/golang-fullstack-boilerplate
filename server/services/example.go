@@ -1,8 +1,10 @@
 package services
 
 import (
+	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -17,6 +19,28 @@ type Client struct {
 	Created  string `db:"created"`
 }
 
+var allowedSortFields = map[string]bool{
+	"name":     true,
+	"progress": true,
+}
+
+type SortOrder struct {
+	Field string
+	Dir   string
+}
+
+func ParseSortOrder(s string) SortOrder {
+	field, dir := "name", "asc"
+	parts := strings.SplitN(s, ",", 2)
+	if len(parts) >= 1 && allowedSortFields[parts[0]] {
+		field = parts[0]
+	}
+	if len(parts) == 2 && parts[1] == "desc" {
+		dir = "desc"
+	}
+	return SortOrder{Field: field, Dir: dir}
+}
+
 type ExampleService struct {
 	db *sqlx.DB
 }
@@ -25,9 +49,14 @@ func NewExampleService(db *sqlx.DB) *ExampleService {
 	return &ExampleService{db: db}
 }
 
-func (s *ExampleService) GetClients() ([]Client, error) {
+func (s *ExampleService) GetClients(sort SortOrder) ([]Client, error) {
 	var clients []Client
-	err := s.db.Select(&clients, `SELECT id, name, company, city, progress, created FROM clients ORDER BY id`)
+	dir := "ASC"
+	if sort.Dir == "desc" {
+		dir = "DESC"
+	}
+	query := fmt.Sprintf(`SELECT id, name, company, city, progress, created FROM clients ORDER BY %s %s`, sort.Field, dir)
+	err := s.db.Select(&clients, query)
 	return clients, err
 }
 
