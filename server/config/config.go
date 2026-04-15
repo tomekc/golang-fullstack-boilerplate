@@ -7,19 +7,17 @@ import (
 	"os"
 
 	toml "github.com/pelletier/go-toml/v2"
+
+	"boilerplate/server/database"
 )
 
 // Parent folder of data directory: for configuration, caches, etc
 const dataDirectory = "data"
 
-type Database struct {
-	Path string `toml:"path"`
-}
-
 type Config struct {
 	DataDir  string
-	Server   Server   `toml:"server"`
-	Database Database `toml:"database"`
+	Server   Server          `toml:"server"`
+	Database database.Config `toml:"database"`
 }
 
 type Server struct {
@@ -50,6 +48,6 @@ func Load() Config {
 func defaultConfig(dataDir string) Config {
 	return Config{
 		DataDir:  dataDir,
-		Database: Database{Path: dataDir + "/db.sqlite3"},
+		Database: database.Config{DSN: dataDir + "/db.sqlite3"},
 	}
 }
