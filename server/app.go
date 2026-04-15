@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 
+	"boilerplate/migrations"
 	"boilerplate/server/config"
 	"boilerplate/server/database"
 	"boilerplate/server/services"
@@ -18,7 +19,7 @@ type Application struct {
 }
 
 func NewApplication(cfg config.Config) *Application {
-	db, err := database.Init(cfg.Database.Path)
+	db, err := database.Init(cfg.Database.Path, migrations.FS)
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
