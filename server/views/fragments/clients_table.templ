@@ -9,20 +9,20 @@ templ sortHeader(label string, field string, sort services.SortOrder) {
 	if sort.Field == field {
 		if sort.Dir == "asc" {
 			<a
-				hx-get={ "/dashboard?sort=" + field + ",desc" }
+				hx-get={ "/htmx/clients?sort=" + field + ",desc" }
 				hx-target="#clients-table"
 				hx-swap="outerHTML"
-				hx-push-url="true"
+				hx-push-url={ "/dashboard?sort=" + field + ",desc" }
 			>
 				{ label }
 				<span class="icon is-small"><i class="mdi mdi-arrow-up"></i></span>
 			</a>
 		} else {
 			<a
-				hx-get={ "/dashboard?sort=" + field + ",asc" }
+				hx-get={ "/htmx/clients?sort=" + field + ",asc" }
 				hx-target="#clients-table"
 				hx-swap="outerHTML"
-				hx-push-url="true"
+				hx-push-url={ "/dashboard?sort=" + field + ",asc" }
 			>
 				{ label }
 				<span class="icon is-small"><i class="mdi mdi-arrow-down"></i></span>
@@ -30,10 +30,10 @@ templ sortHeader(label string, field string, sort services.SortOrder) {
 		}
 	} else {
 		<a
-			hx-get={ "/dashboard?sort=" + field + ",asc" }
+			hx-get={ "/htmx/clients?sort=" + field + ",asc" }
 			hx-target="#clients-table"
 			hx-swap="outerHTML"
-			hx-push-url="true"
+			hx-push-url={ "/dashboard?sort=" + field + ",asc" }
 		>
 			{ label }
 			<span class="icon is-small"><i class="mdi mdi-sort"></i></span>

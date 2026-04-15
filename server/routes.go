@@ -15,6 +15,7 @@ func (app *Application) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /dashboard", app.DashboardPage)
 	mux.HandleFunc("GET /hello", app.HelloPage)
 	mux.HandleFunc("GET /about", app.AboutPage)
+	mux.HandleFunc("GET /htmx/clients", app.HtmxClients)
 	mux.HandleFunc("GET /htmx/time", app.HtmxGetTime)
 	mux.HandleFunc("POST /htmx/echo", app.HtmxEcho)
 }
@@ -26,11 +27,17 @@ func (app *Application) DashboardPage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to load clients", http.StatusInternalServerError)
 		return
 	}
-	if r.Header.Get("HX-Request") == "true" {
-		fragments.ClientsTable(clients, sort).Render(r.Context(), w)
+	pages.Dashboard(clients, sort).Render(r.Context(), w)
+}
+
+func (app *Application) HtmxClients(w http.ResponseWriter, r *http.Request) {
+	sort := services.ParseSortOrder(r.URL.Query().Get("sort"))
+	clients, err := app.ExampleService.GetClients(sort)
+	if err != nil {
+		http.Error(w, "failed to load clients", http.StatusInternalServerError)
 		return
 	}
-	pages.Dashboard(clients, sort).Render(r.Context(), w)
+	fragments.ClientsTable(clients, sort).Render(r.Context(), w)
 }
 
 func (app *Application) HelloPage(w http.ResponseWriter, r *http.Request) {
