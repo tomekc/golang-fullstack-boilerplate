@@ -27,6 +27,7 @@ func New(cfg Config, migrationsFS fs.FS) (*Database, error) {
 		return nil, err
 	}
 	if err := runMigrations(db, migrationsFS); err != nil {
+		db.Close()
 		return nil, err
 	}
 	return &Database{DB: db}, nil
