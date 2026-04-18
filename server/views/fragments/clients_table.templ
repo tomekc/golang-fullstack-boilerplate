@@ -5,40 +5,33 @@ import (
 	"fmt"
 )
 
-templ sortHeader(label string, field string, sort services.SortOrder) {
-	if sort.Field == field {
-		if sort.Dir == "asc" {
-			<a
-				hx-get={ "/htmx/clients?sort=" + field + ",desc" }
-				hx-target="#clients-table"
-				hx-swap="outerHTML"
-				hx-push-url={ "/dashboard?sort=" + field + ",desc" }
-			>
-				{ label }
-				<span class="icon is-small"><i class="mdi mdi-arrow-up"></i></span>
-			</a>
-		} else {
-			<a
-				hx-get={ "/htmx/clients?sort=" + field + ",asc" }
-				hx-target="#clients-table"
-				hx-swap="outerHTML"
-				hx-push-url={ "/dashboard?sort=" + field + ",asc" }
-			>
-				{ label }
-				<span class="icon is-small"><i class="mdi mdi-arrow-down"></i></span>
-			</a>
-		}
-	} else {
-		<a
-			hx-get={ "/htmx/clients?sort=" + field + ",asc" }
-			hx-target="#clients-table"
-			hx-swap="outerHTML"
-			hx-push-url={ "/dashboard?sort=" + field + ",asc" }
-		>
-			{ label }
-			<span class="icon is-small"><i class="mdi mdi-sort"></i></span>
-		</a>
+func sortNextDir(sort services.SortOrder, field string) string {
+	if sort.Field == field && sort.Dir == "asc" {
+		return "desc"
 	}
+	return "asc"
+}
+
+func sortIcon(sort services.SortOrder, field string) string {
+	if sort.Field != field {
+		return "mdi mdi-sort"
+	}
+	if sort.Dir == "asc" {
+		return "mdi mdi-arrow-up"
+	}
+	return "mdi mdi-arrow-down"
+}
+
+templ sortHeader(label string, field string, sort services.SortOrder) {
+	<a
+		hx-get={ "/htmx/clients?sort=" + field + "," + sortNextDir(sort, field) }
+		hx-target="#clients-table"
+		hx-swap="outerHTML"
+		hx-push-url={ "/dashboard?sort=" + field + "," + sortNextDir(sort, field) }
+	>
+		{ label }
+		<span class="icon is-small"><i class={ sortIcon(sort, field) }></i></span>
+	</a>
 }
 
 templ ClientsTable(clients []services.Client, sort services.SortOrder) {
