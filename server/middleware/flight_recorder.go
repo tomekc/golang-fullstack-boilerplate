@@ -22,3 +22,10 @@ func (r *flightRecorder) Write(b []byte) (int, error) {
 	r.BytesWritten += n
 	return n, err
 }
+
+// Implement Flusher interface, required for SSE
+func (r *flightRecorder) Flush() {
+	if f, ok := r.ResponseWriter.(http.Flusher); ok {
+		f.Flush()
+	}
+}

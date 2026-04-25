@@ -14,7 +14,7 @@ templ Dashboard(clients []services.Client, sort services.SortOrder) {
 		<section class="section is-main-section">
 			<div class="columns is-tiles-wrapper">
 				@components.Tile("Clients", "512", "account-multiple", "primary")
-				@components.Tile("Sales", "$7,770", "cart-outline", "info")
+				@components.SSETile("Sales", "$1,000", "cart-outline", "info", "/example/sse/sales", "sales")
 				@components.Tile("Performance", "256%", "finance", "success")
 			</div>
 			@components.Card("Clients", "account-multiple", true) {

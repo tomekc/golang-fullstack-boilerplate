@@ -6,6 +6,7 @@ import (
 	"boilerplate/server/services"
 	"boilerplate/server/views/fragments"
 	"boilerplate/server/views/pages"
+	"go.jetify.com/sse"
 )
 
 func (app *Application) RegisterRoutes(mux *http.ServeMux) {
@@ -19,6 +20,7 @@ func (app *Application) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /htmx/time", app.HtmxGetTime)
 	mux.HandleFunc("POST /htmx/echo", app.HtmxEcho)
 	mux.HandleFunc("PUT /htmx/hello/remember", app.HtmxRemember)
+	mux.HandleFunc("GET /example/sse/sales", app.ExampleSSESalesStream) // EXAMPLE: SSE — remove with example
 }
 
 func (app *Application) DashboardPage(w http.ResponseWriter, r *http.Request) {
@@ -67,5 +69,42 @@ func (app *Application) HtmxRemember(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("<p>Remembered </p>"))
 	} else {
 		w.Write([]byte("<p>Not remembered </p>"))
+	}
+}
+
+func (app *Application) ExampleSSESalesStream(w http.ResponseWriter, r *http.Request) {
+	conn, err := sse.Upgrade(r.Context(), w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer conn.Close()
+
+	ch, unsubscribe := app.ExampleSSESales.Subscribe()
+	defer unsubscribe()
+
+	ctx := r.Context()
+	if err := conn.SendEvent(ctx, &sse.Event{
+		Event: "sales",
+		Data:  sse.Raw(app.ExampleSSESales.Current()),
+	}); err != nil {
+		return
+	}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case v, ok := <-ch:
+			if !ok {
+				return
+			}
+			if err := conn.SendEvent(ctx, &sse.Event{
+				Event: "sales",
+				Data:  sse.Raw(v),
+			}); err != nil {
+				return
+			}
+		}
 	}
 }
