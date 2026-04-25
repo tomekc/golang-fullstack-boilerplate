@@ -18,6 +18,7 @@ func (app *Application) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /htmx/clients", app.HtmxClients)
 	mux.HandleFunc("GET /htmx/time", app.HtmxGetTime)
 	mux.HandleFunc("POST /htmx/echo", app.HtmxEcho)
+	mux.HandleFunc("PUT /htmx/hello/remember", app.HtmxRemember)
 }
 
 func (app *Application) DashboardPage(w http.ResponseWriter, r *http.Request) {
@@ -56,4 +57,15 @@ func (app *Application) HtmxGetTime(w http.ResponseWriter, r *http.Request) {
 func (app *Application) HtmxEcho(w http.ResponseWriter, r *http.Request) {
 	info := app.ExampleService.BuildEchoResponse(r)
 	fragments.EchoResult(info).Render(r.Context(), w)
+}
+
+func (app *Application) HtmxRemember(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	r.ParseForm()
+	shouldRemember := r.PostForm.Get("checked")
+	if shouldRemember == "true" {
+		w.Write([]byte("<p>Remembered </p>"))
+	} else {
+		w.Write([]byte("<p>Not remembered </p>"))
+	}
 }
