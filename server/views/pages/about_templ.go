@@ -74,7 +74,7 @@ func About() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"content\"><p>This is a <strong>Golang Fullstack Boilerplate</strong> project demonstrating two frontend approaches:</p><ul><li><strong>SvelteKit SPA</strong> - A modern JavaScript framework with client-side rendering, embedded into the Go binary at build time.</li><li><strong>HTMX + Templ</strong> - Server-side rendered HTML using Templ template language and HTMX for dynamic interactions without writing JavaScript.</li></ul><p>Switch between frontends via <code>frontend</code> in <code>data/config.toml</code>.</p>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"content\"><p>This is a <strong>Golang Fullstack Boilerplate</strong> project using server-side rendering with <strong>HTMX + Templ</strong> — dynamic interactions without writing JavaScript.</p>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
