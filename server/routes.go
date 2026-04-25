@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"net/http"
 
 	"boilerplate/server/services"
@@ -84,10 +85,7 @@ func (app *Application) ExampleSSESalesStream(w http.ResponseWriter, r *http.Req
 	defer unsubscribe()
 
 	ctx := r.Context()
-	if err := conn.SendEvent(ctx, &sse.Event{
-		Event: "sales",
-		Data:  sse.Raw(app.ExampleSSESales.Current()),
-	}); err != nil {
+	if err := app.sendSalesEvent(conn, ctx, app.ExampleSSESales.Current()); err != nil {
 		return
 	}
 
@@ -99,12 +97,16 @@ func (app *Application) ExampleSSESalesStream(w http.ResponseWriter, r *http.Req
 			if !ok {
 				return
 			}
-			if err := conn.SendEvent(ctx, &sse.Event{
-				Event: "sales",
-				Data:  sse.Raw(v),
-			}); err != nil {
+			if err := app.sendSalesEvent(conn, ctx, v); err != nil {
 				return
 			}
 		}
 	}
+}
+
+func (app *Application) sendSalesEvent(conn *sse.Conn, ctx context.Context, currentSales string) error {
+	return conn.SendEvent(ctx, &sse.Event{
+		Event: "sales",
+		Data:  sse.Raw(currentSales),
+	})
 }
