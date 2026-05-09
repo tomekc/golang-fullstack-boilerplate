@@ -8,6 +8,12 @@
 * **Templ** for server-side HTML templates
 * **Golang** server
 
+### ...and to spice it up
+
+* [Admin One template](https://github.com/vikdiesel/admin-one-bulma-dashboard) to get you started quickly
+* **Database package** with pure-Go (no CGo!) implementation of SQLite
+* Database **migrations** built-in in [migrations](migrations) folder
+
 This project is a self-contained, simple web application you can use for
 
 * hackathons
