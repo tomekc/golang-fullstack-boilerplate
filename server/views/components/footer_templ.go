@@ -29,7 +29,7 @@ func Footer() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"footer\"><div class=\"container-fluid\"><div class=\"level\"><div class=\"level-left\"><div class=\"level-item\">&copy; 2025, Golang-SvelteKit Boilerplate</div></div></div></div></footer>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<footer class=\"footer\"><div class=\"container-fluid\"><div class=\"level\"><div class=\"level-left\"><div class=\"level-item\">&copy; 2025, Golang Fullstack Boilerplate</div></div></div></div></footer>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

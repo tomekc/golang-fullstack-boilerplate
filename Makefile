@@ -1,4 +1,4 @@
-.PHONY: help run run-dev build templ-generate templ-watch run-templ ensure-templ
+.PHONY: help run run-dev build templ-generate templ-watch run-templ ensure-templ templ-update
 
 .DEFAULT_GOAL := help
 
@@ -11,6 +11,11 @@ ensure-templ: ## Install templ if it is not already on PATH
 		echo "templ not found, installing..."; \
 		go install github.com/a-h/templ/cmd/templ@latest; \
 	}
+
+templ-update: ## Update templ module and CLI to the latest version
+	go get github.com/a-h/templ@latest
+	go install github.com/a-h/templ/cmd/templ@latest
+	go mod tidy
 
 run: ## Run the server with 'go run'
 	go run main.go
